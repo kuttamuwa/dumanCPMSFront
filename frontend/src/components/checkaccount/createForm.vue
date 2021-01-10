@@ -81,7 +81,7 @@
           ></v-combobox>
         </v-col>
 
-<!--        İletişim bilgileri-->
+        <!--        İletişim bilgileri-->
         <v-col
             cols="12"
             md="4"
@@ -136,12 +136,12 @@ export default {
     email_addr: '',
 
     generalRules: [
-        v => !!v || 'Bu alan boş bırakılamaz !',
+      v => !!v || 'Bu alan boş bırakılamaz !',
     ],
 
     kimlikRules: [
-        v => !!v || 'Kimlik No gereklidir',
-        v => v.length !== 11 || 'Kimlik numarası 11 haneden farklı olamaz !'
+      v => !!v || 'Kimlik No gereklidir',
+      v => v.length !== 11 || 'Kimlik numarası 11 haneden farklı olamaz !'
     ],
 
     nameRules: [
@@ -155,8 +155,8 @@ export default {
     ],
 
     telnoRules: [
-        v => !!v || 'Telefon numarası gereklidir',
-        v => v.length !== 10 || '10 haneli telefon numaranızı giriniz '
+      v => !!v || 'Telefon numarası gereklidir',
+      v => v.length !== 10 || '10 haneli telefon numaranızı giriniz '
     ],
 
 

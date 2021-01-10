@@ -1,19 +1,38 @@
-# frontend
+# 360 Müşteri Performans Yönetim Platformu
 
-## Project setup
-```
-npm install
-```
+## Yönetim Paneli
 
-### Compiles and hot-reloads for development
-```
-npm run serve
+### Kullanıcı Ekleme
 ```
 
-### Compiles and minifies for production
-```
-npm run build
 ```
 
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
+### Yetkilendirme
+```
+
+```
+
+### Konfigürasyon
+```
+
+```
+
+## Modüller
+```
+
+```
+
+### Cari Hesap
+```
+ca
+```
+
+### Risk Analiz
+```
+ra
+```
+
+### Dashboard
+```
+Dashboard
+```

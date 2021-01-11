@@ -20,7 +20,7 @@
 
       <v-btn
           class="mr-4"
-          type="submit"
+          @click="submit"
           :disabled="invalid"
       >
         Gönder
@@ -30,6 +30,19 @@
       </v-btn>
     </v-form>
 
+    <v-expansion-panel id="RiskDatasets">
+      <v-expansion-panel-header>
+        Veriler
+      </v-expansion-panel-header>
+      <v-expansion-panel-content>
+        <v-data-table
+            :headers="riskdatasetColumns"
+            :items="riskdatasetValues"
+            :items-per-page="10"
+            class="elevation-1"
+        ></v-data-table>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
 
   </div>
 </template>
@@ -40,12 +53,33 @@ export default {
   data: () => ({
     excelFile: '',
     fileRules: [
-        v => v.endsWith('.xlsx') !== true || 'Sadece xlsx uzantısındaki Exceller kabul edilir !'
-    ]
+      v => v.endsWith('.xlsx') !== true || 'Sadece xlsx uzantısındaki Exceller kabul edilir !'
+    ],
+
+    riskdatasetColumns: [],
+
+    riskdatasetValues: []
 
   }),
 
   methods: {
+    getRiskDatasets() {
+      this.riskdatasetValues = []
+
+    },
+
+    setRiskDatasetColumns() {
+      var datasets = this.riskdatasetValues;
+      this.riskdatasetColumns = datasets;
+
+    },
+
+    initialize() {
+      // veriler çekilir
+      this.getRiskDatasets();
+      this.setRiskDatasetColumns()
+    },
+
     submit() {
       this.$refs.observer.validate()
     },

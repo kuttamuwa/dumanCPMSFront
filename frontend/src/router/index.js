@@ -35,15 +35,15 @@ const routes = [
     },
 
     {
-        path: "/tests",
-        name: "test",
-        component: () => import('../views/Tests')
+        path: "/config",
+        name: "Configuration",
+        component: () => import('../views/Configuration')
     },
 
     {
-        path: "/guide",
-        name: "Guide",
-        component: () => import('../views/Guide')
+        path: "/tests",
+        name: "test",
+        component: () => import('../views/Tests')
     },
 
     {
@@ -54,7 +54,13 @@ const routes = [
         // which is lazy-loaded when the route is visited.
         component: () => import(/* webpackChunkName:
     "about" */ '../views/About.vue')
-    }
+    },
+
+    {
+        path: "/guide",
+        name: "Guide",
+        component: () => import('../views/Guide')
+    },
 ]
 
 const router = new VueRouter({

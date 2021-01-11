@@ -2,180 +2,123 @@
   <v-form v-model="valid">
     <div id="createCheckAccount">
       <v-expansion-panels>
+
         <v-expansion-panel id="creationForm">
           <v-expansion-panel-header>
             Cari Hesap Aç
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-card>
-
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col
-                        cols="12"
-                        md="4"
-                    >
-                      <v-card-text> Ticari Bilgiler</v-card-text>
-                      <v-combobox
-                          label="Firma Tipi"
-                          persistent-hint
-                          v-model="firmaTipi"
-                          :items="firmTypes"
-                      ></v-combobox>
-
-                      <v-text-field
-                          label="Firma Adı"
-                          v-model="firmaAdi"
-                          required
-                      ></v-text-field>
-
-                      <v-text-field
-                          label="Kimlik No"
-                          v-model="kimlikNo"
-                          :rules="kimlikRules"
-                          required
-                      ></v-text-field>
-
-                      <v-text-field
-                          label="Vergi Departmanı"
-                          v-model="vdepartmani"
-                          :rules="generalRules"
-                          required
-                      ></v-text-field>
-
-                      <v-text-field
-                          label="Firma Adresi"
-                          v-model="firmaddr"
-                          :rules="generalRules"
-                          required
-                      ></v-text-field>
-
-                      <v-combobox
-                          label="Doğum Yeri"
-                          persistent-hint
-                          v-model="dyeri"
-                          :items="sehirler"
-                      ></v-combobox>
-
-                      <v-combobox
-                          persistent-hint
-                          label="İletişim Personeli"
-                          v-model="firmcontact"
-                          :items="syspersonnels"
-                      ></v-combobox>
-
-                    </v-col>
-
-                    <v-col>
-                      <v-card-text>Firma Bilgileri</v-card-text>
-                      <v-text-field
-                          v-model="sektor"
-                          :rules="generalRules"
-                          label="Sektör"
-                          required
-                      ></v-text-field>
-
-                      <v-combobox
-                          persistent-hint
-                          label="Şehir"
-                          v-model="sehir"
-                          :items="sehirler"
-                      ></v-combobox>
-
-                      <v-combobox
-                          persistent-hint
-                          label="İlçe"
-                          v-model="ilce"
-                          :items="ilceler"
-                      ></v-combobox>
-                      <br>
-
-                      <v-container id="attachmentsTicaret">
-                        <v-file-input
-                            accept="image/*"
-                            label="Faaliyet Belgesi"
-                        ></v-file-input>
-
-                        <v-file-input
-                            accept="image/*"
-                            label="Vergi Beyannamesi"
-                        ></v-file-input>
-
-                        <v-file-input
-                            accept="image/*"
-                            label="İmza Sirküleri"
-                        ></v-file-input>
-                      </v-container>
-                    </v-col>
-
-                    <!--        İletişim bilgileri-->
-                    <v-col
-                        cols="12"
-                        md="4"
-                    >
-                      <v-card-text>İletişim Bilgileri</v-card-text>
-                      <v-text-field
-                          v-model="email_addr"
-                          :rules="emailRules"
-                          label="E-mail"
-                          required
-                      ></v-text-field>
-
-
-                      <v-text-field
-                          v-model="telno"
-                          :rules="telnoRules"
-                          label="Telefon"
-                          required
-                      ></v-text-field>
-
-                      <v-text-field
-                          v-model="fax"
-                          label="Fax"
-                          required
-                      ></v-text-field>
-
-                      <v-container id="attachmentsPartnership">
-                        <v-file-input
-                            accept="image/*"
-                            label="Ortaklık yapısı ve kimlik kopyaları"
-                        ></v-file-input>
-
-                        <v-file-input
-                            accept="image/*"
-                            label="Kimlik kopyaları"
-                        ></v-file-input>
-
-                        <v-file-input
-                            accept="image/*"
-                            label="Yönetim kurulu yapısı"
-                        ></v-file-input>
-                      </v-container>
-
-                    </v-col>
-
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="close"
+            <v-container>
+              <v-row>
+                <v-col
+                    cols="12"
+                    md="4"
                 >
-                  Temizle
-                </v-btn>
-                <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="save"> Kaydet
-                </v-btn>
-              </v-card-actions>
-            </v-card>
+                  <v-card-text> Ticari Bilgiler</v-card-text>
+                  <v-combobox
+                      label="Firma Tipi"
+                      persistent-hint
+                      v-model="firmaTipi"
+                      :items="firmTypes"
+                  ></v-combobox>
 
+                  <v-text-field
+                      label="Firma Adı"
+                      v-model="firmaAdi"
+                      required
+                  ></v-text-field>
+
+                  <v-text-field
+                      label="Kimlik No"
+                      v-model="kimlikNo"
+                      :rules="kimlikRules"
+                      required
+                  ></v-text-field>
+
+                  <v-text-field
+                      label="Vergi Departmanı"
+                      v-model="vdepartmani"
+                      :rules="generalRules"
+                      required
+                  ></v-text-field>
+
+                  <v-text-field
+                      label="Firma Adresi"
+                      v-model="firmaddr"
+                      :rules="generalRules"
+                      required
+                  ></v-text-field>
+
+                  <v-combobox
+                      label="Doğum Yeri"
+                      persistent-hint
+                      v-model="dyeri"
+                      :items="sehirler"
+                  ></v-combobox>
+
+                  <v-combobox
+                      persistent-hint
+                      label="İletişim Personeli"
+                      v-model="firmcontact"
+                      :items="syspersonnels"
+                  ></v-combobox>
+
+                </v-col>
+
+                <v-col>
+                  <v-card-text>Firma Bilgileri</v-card-text>
+                  <v-text-field
+                      v-model="sektor"
+                      :rules="generalRules"
+                      label="Sektör"
+                      required
+                  ></v-text-field>
+
+                  <v-combobox
+                      persistent-hint
+                      label="Şehir"
+                      v-model="sehir"
+                      :items="sehirler"
+                  ></v-combobox>
+
+                  <v-combobox
+                      persistent-hint
+                      label="İlçe"
+                      v-model="ilce"
+                      :items="ilceler"
+                  ></v-combobox>
+                </v-col>
+
+                <!--        İletişim bilgileri-->
+                <v-col
+                    cols="12"
+                    md="4"
+                >
+                  <v-card-text>İletişim Bilgileri</v-card-text>
+                  <v-text-field
+                      v-model="email_addr"
+                      :rules="emailRules"
+                      label="E-mail"
+                      required
+                  ></v-text-field>
+
+
+                  <v-text-field
+                      v-model="telno"
+                      :rules="telnoRules"
+                      label="Telefon"
+                      required
+                  ></v-text-field>
+
+                  <v-text-field
+                      v-model="fax"
+                      label="Fax"
+                      required
+                  ></v-text-field>
+                </v-col>
+
+              </v-row>
+            </v-container>
           </v-expansion-panel-content>
         </v-expansion-panel>
 

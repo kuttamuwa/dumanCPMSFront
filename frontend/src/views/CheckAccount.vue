@@ -128,8 +128,8 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-data-table
-                :headers="hesapSutunlari"
-                :items="hesapDegerleri"
+                :headers="accountColumns"
+                :items="accountValues"
                 :items-per-page="5"
                 class="elevation-1"
             ></v-data-table>
@@ -199,7 +199,7 @@ export default {
 
     syspersonnels: [],
 
-    hesapSutunlari: [
+    accountColumns: [
       {
         text: 'Firma Adı',
         align: 'start',
@@ -219,7 +219,8 @@ export default {
       {text: 'Web', value: 'iron'},
       {text: 'Email', value: 'email_addr'},
     ],
-    hesapDegerleri: [
+
+    accountValues: [
       {
         firmaAdi: 'Umut A.Ş.',
         firmaTipi: 'Şahıs',
@@ -252,7 +253,131 @@ export default {
       },
     ],
 
+
+    defaultItem: {
+      firmaAdi: '',
+      firmaTipi: '',
+      kimlikNo: '',
+      dyeri: '',
+      vdepartmani: '',
+      firmaddr: '',
+      firmcontact: '',
+      sektor: '',
+      sehir: '',
+      ilce: '',
+      telno: '',
+      fax: '',
+      email_addr: ''
+    },
+
   }),
+
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+    },
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close()
+    },
+    dialogDelete(val) {
+      val || this.closeDelete()
+    },
+  },
+
+  created() {
+    this.initialize()
+  },
+
+  methods: {
+    getaccounts() {
+      // servise istek atip yazacagimiz yer
+    },
+
+    initialize() {
+      // accountlar
+      this.getaccounts();
+
+      // test degerleri
+      this.accountValues = [
+        {
+          firmaAdi: 'Umut A.Ş.',
+          firmaTipi: 'Şahıs',
+          kimlikNo: '13244112113',
+          dyeri: 'Çorum',
+          vdepartmani: 'Ümraniye Vergi Dairesi',
+          firmaddr: 'a b c',
+          firmcontact: 'Salim O.',
+          sektor: 'IT',
+          sehir: 'İstanbul',
+          ilce: 'Ümraniye',
+          telno: '+90 505 238 19 51',
+          fax: '+212 143 13 32',
+          email_addr: 'uucok@sirket.com.tr'
+        },
+        {
+          firmaAdi: 'Ahmet A.Ş.',
+          firmaTipi: 'Tüzel',
+          kimlikNo: '17318665774',
+          dyeri: null,
+          vdepartmani: 'Ümraniye Vergi Dairesi',
+          firmaddr: 'a b c',
+          firmcontact: 'Salim O.',
+          sektor: 'IT',
+          sehir: 'İstanbul',
+          ilce: 'Ümraniye',
+          telno: '+90 505 238 19 51',
+          fax: '+212 143 13 32',
+          email_addr: 'uucok@sirket.com.tr'
+        },
+      ]
+    },
+
+
+    editItem(item) {
+      this.editedIndex = this.accountValues.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialog = true
+    },
+
+    deleteItem(item) {
+      this.editedIndex = this.accountValues.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialogDelete = true
+    },
+
+    deleteItemConfirm() {
+      this.accountValues.splice(this.editedIndex, 1)
+      this.closeDelete()
+    },
+
+    close() {
+      this.dialog = false
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      })
+    },
+
+    closeDelete() {
+      this.dialogDelete = false
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      })
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.desserts[this.editedIndex], this.editedItem)
+      } else {
+        this.desserts.push(this.editedItem)
+      }
+      this.close()
+    },
+  }
 }
 </script>
 

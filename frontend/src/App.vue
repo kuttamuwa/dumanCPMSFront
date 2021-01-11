@@ -8,16 +8,6 @@
     >
 
       <v-img src="DUMANARGE.jpg"></v-img>
-<!--      <v-list-item>-->
-<!--        <v-list-item-content>-->
-<!--          <v-list-item-title class="title">-->
-<!--            Modüller-->
-<!--          </v-list-item-title>-->
-<!--          <v-list-item-subtitle>-->
-<!--            Yetkiye göre değişiklik gösterebilir-->
-<!--          </v-list-item-subtitle>-->
-<!--        </v-list-item-content>-->
-<!--      </v-list-item>-->
 
       <v-divider></v-divider>
 

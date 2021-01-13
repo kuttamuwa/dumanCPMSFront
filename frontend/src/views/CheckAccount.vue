@@ -295,7 +295,7 @@ export default {
       {text: 'Fax', value: 'fax'},
       {text: 'Web', value: 'iron'},
       {text: 'Email', value: 'email_addr'},
-      {text: 'Aksiyonlar', value:'actions', sortable: false},
+      {text: 'Aksiyonlar', value: 'actions', sortable: false},
     ],
 
     accountValues: [

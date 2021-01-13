@@ -188,8 +188,23 @@
                 :headers="accountColumns"
                 :items="accountValues"
                 :items-per-page="5"
-                class="elevation-1"
-            ></v-data-table>
+                class="elevation-1">
+              <template v-slot:item.actions="{ item }">
+                <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(item)"
+                >
+                  mdi-pencil
+                </v-icon>
+                <v-icon
+                    small
+                    @click="deleteItem(item)"
+                >
+                  mdi-delete
+                </v-icon>
+              </template>
+            </v-data-table>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -208,7 +223,7 @@ export default {
   name: "CheckAccount",
   data: () => ({
     valid: false,
-
+    dialog: false,
     firmaTipi: '',
     firmaAdi: '',
     kimlikNo: '',
@@ -280,6 +295,7 @@ export default {
       {text: 'Fax', value: 'fax'},
       {text: 'Web', value: 'iron'},
       {text: 'Email', value: 'email_addr'},
+      {text: 'Aksiyonlar', value:'actions', sortable: false},
     ],
 
     accountValues: [
@@ -332,11 +348,11 @@ export default {
     setaccounts() {
       // servise istek atip yazacagimiz yer
       axios.get(API_URL + '/accounts/')
-      .then((response) => {
-        console.log(response);
+          .then((response) => {
+            console.log(response);
 
-        this.accountValues = response;
-      })
+            this.accountValues = response;
+          })
 
 
     },

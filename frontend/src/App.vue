@@ -73,7 +73,8 @@ export default {
           {title: 'About', icon: 'mdi-help-box', to: '/about'},
           {title: 'Admin & Config', icon: 'mdi-cog-outline', to: '/appconfig'},
 
-          {title: "Tests", icon: "mdi-test", to:'/tests'}
+          {title: "Tests", icon: "mdi-test", to:'/tests'},
+          {title: "Crud Test", icon: "mdi-test", to:'/crudtests'}
         ],
       }),
 }

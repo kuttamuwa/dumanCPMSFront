@@ -199,7 +199,12 @@
 </template>
 
 <script>
+import axios from 'axios';
+
+const API_URL = 'http://127.0.0.1:8000/checkaccount/api';
+
 export default {
+
   name: "CheckAccount",
   data: () => ({
     valid: false,
@@ -278,36 +283,7 @@ export default {
     ],
 
     accountValues: [
-      {
-        firmaAdi: 'Umut A.Ş.',
-        firmaTipi: 'Şahıs',
-        kimlikNo: '13244112113',
-        dyeri: 'Çorum',
-        vdepartmani: 'Ümraniye Vergi Dairesi',
-        firmaddr: 'a b c',
-        firmcontact: 'Salim O.',
-        sektor: 'IT',
-        sehir: 'İstanbul',
-        ilce: 'Ümraniye',
-        telno: '+90 505 238 19 51',
-        fax: '+212 143 13 32',
-        email_addr: 'uucok@sirket.com.tr'
-      },
-      {
-        firmaAdi: 'Ahmet A.Ş.',
-        firmaTipi: 'Tüzel',
-        kimlikNo: '17318665774',
-        dyeri: null,
-        vdepartmani: 'Ümraniye Vergi Dairesi',
-        firmaddr: 'a b c',
-        firmcontact: 'Salim O.',
-        sektor: 'IT',
-        sehir: 'İstanbul',
-        ilce: 'Ümraniye',
-        telno: '+90 505 238 19 51',
-        fax: '+212 143 13 32',
-        email_addr: 'uucok@sirket.com.tr'
-      },
+      {}
     ],
 
 
@@ -348,14 +324,26 @@ export default {
     this.initialize()
   },
 
+  mounted() {
+    this.setaccounts();
+  },
+
   methods: {
-    getaccounts() {
+    setaccounts() {
       // servise istek atip yazacagimiz yer
+      axios.get(API_URL + '/accounts/')
+      .then((response) => {
+        console.log(response);
+
+        this.accountValues = response;
+      })
+
+
     },
 
     initialize() {
       // accountlar
-      this.getaccounts();
+      this.setaccounts();
 
       // test degerleri
       this.accountValues = [

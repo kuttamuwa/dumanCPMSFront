@@ -243,6 +243,13 @@
 </template>
 
 <script>
+const API_URL = 'http://127.0.0.1:8000/checkaccount/api';
+const axios = require('axios').default;
+import Cookies from "js-cookie";
+
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
+axios.defaults.xsrfCookieName = "csrftoken";
+
 export default {
   data: () => ({
     dialog: false,
@@ -296,8 +303,6 @@ export default {
       email_addr: ''
     },
 
-    desserts: [],
-
     editedIndex: -1,
 
     editedItem: {
@@ -337,6 +342,10 @@ export default {
     this.initialize()
   },
 
+  mounted() {
+    this.getDataFromApi();
+  },
+
   methods: {
     initialize() {
       this.accountValues = [
@@ -371,6 +380,36 @@ export default {
           email_addr: 'uucok@sirket.com.tr'
         },
       ]
+    },
+
+    getDataFromApi() {
+      console.log("Naber")
+      var url = API_URL + '/accounts/';
+      console.log(url);
+      var r = axios.create({
+            timeout: 5000,
+            baseURL: url,
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": Cookies.get('csrftoken')
+            }
+          }
+      );
+
+      r.get(url)
+          .then(function (response) {
+            // handle success
+            console.log(response);
+          })
+          .catch(function (error) {
+            // handle error
+            console.log(error);
+          })
+          .then(function () {
+            // always executed
+          });
+
+
     },
 
     editItem(item) {

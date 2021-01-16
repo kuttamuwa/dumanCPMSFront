@@ -21,7 +21,6 @@
       <v-btn
           class="mr-4"
           @click="submit"
-          :disabled="invalid"
       >
         Gönder
       </v-btn>
@@ -52,15 +51,79 @@ export default {
   name: "RiskAnalysis",
   data: () => ({
     excelFile: '',
-    fileRules: [
-      v => v.endsWith('.xlsx') !== true || 'Sadece xlsx uzantısındaki Exceller kabul edilir !'
+    fileRules: [],
+
+    riskdatasetColumns: [
+      {text: 'Müşteri', align: 'start', value: 'musteriAdi'},
+      {text: 'Son 12 Aylık Toplam Ciro', value: 'ciro'},
+      {text: 'Limit', value: 'limit'},
+      {text: 'Teminat Durumu', value: 'teminatDurumu'},
+      {text: 'Teminat Tutarı', value: 'teminatTutari'},
+      {text: 'Vade', value: 'vade'},
+      {text: 'Vade Aşımı Ortalaması', value: 'vadeAsimiOr'},
+      {text: 'Ödeme Sıklığı', value: 'odemeSikligi'},
+      {text: '12 Aylık Ortalama Sipariş Tutarı', value: 'siparisTutariOrt12'},
+      {text: '1 Aylık Ortalama Sipariş Tutarı', value: 'sipartisTutariOrt1'},
+      {text: 'Son Ay İade Yüzdesi', value: 'iadeYuzdesi1'},
+      {text: 'Son 12 Ay İade Yüzdesi', value: 'iadeYuzdesi12'},
+      {text: 'Ortalama Gecikme Gün Sayısı', value: 'ortGecikmeGunSayisi'},
+      {text: 'Ortalama Gecikme Gün Bakiyesi', value: 'ortGecikmeGunBakiyesi'},
+      {text: 'Bakiye', value: 'bakiye'}
     ],
 
-    riskdatasetColumns: [],
+    defaultItem: {
+      musteriAdi: '',
+      ciro: '',
+      limit: '',
+      teminatDurumu: '',
+      teminatTutari: '',
+      vade: '',
+      vadeAsimiOr: '',
+      odemeSikligi: '',
+      siparisTutariOrt12: '',
+      sipartisTutariOrt1: '',
+      iadeYuzdesi1: '',
+      iadeYuzdesi12: '',
+      ortGecikmeGunSayisi: '',
+      ortGecikmeGunBakiyesi: '',
+      bakiye: ''
+    },
 
-    riskdatasetValues: []
+    riskdatasetValues: [],
 
+    editedIndex: -1,
+
+    editedItem: {
+      musteriAdi: '',
+      ciro: '',
+      limit: '',
+      teminatDurumu: '',
+      teminatTutari: '',
+      vade: '',
+      vadeAsimiOr: '',
+      odemeSikligi: '',
+      siparisTutariOrt12: '',
+      sipartisTutariOrt1: '',
+      iadeYuzdesi1: '',
+      iadeYuzdesi12: '',
+      ortGecikmeGunSayisi: '',
+      ortGecikmeGunBakiyesi: '',
+      bakiye: ''
+    }
   }),
+
+  watch: {
+    dialog(val) {
+      val || this.close()
+    },
+    dialogDelete(val) {
+      val || this.closeDelete()
+    },
+  },
+
+  created() {
+    this.initialize()
+  },
 
   methods: {
     getRiskDatasets() {
@@ -88,6 +151,50 @@ export default {
       this.excelFile = ''
       this.$refs.observer.reset()
     },
+
+
+    editItem(item) {
+      this.editedIndex = this.riskdatasetValues.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialog = true
+    },
+
+    deleteItem(item) {
+      this.editedIndex = this.riskdatasetValues.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialogDelete = true
+    },
+
+    deleteItemConfirm() {
+      this.desserts.splice(this.editedIndex, 1)
+      this.closeDelete()
+    },
+
+    close() {
+      this.dialog = false
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      })
+    },
+
+    closeDelete() {
+      this.dialogDelete = false
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      })
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.riskdatasetValues[this.editedIndex], this.editedItem)
+      } else {
+        this.riskdatasetValues.push(this.editedItem)
+      }
+      this.close()
+    },
+
   },
 }
 </script>

@@ -1,64 +1,667 @@
 <template>
-  <v-container fluid>
-    <v-row align="center">
-      <v-col
-          class="d-flex"
-          cols="12"
-          sm="6"
-      >
-        <v-select
-            :items="items"
-            label="Standard"
-        ></v-select>
-      </v-col>
+  <v-form v-model="valid">
+    <div id="createCheckAccount">
+      <v-expansion-panels>
+        <v-expansion-panel id="creationForm">
+          <v-expansion-panel-header>
+            Cari Hesap Aç
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-card>
+              <v-card-text>
+                <v-container>
+                  <v-row>
+                    <v-col
+                        cols="12"
+                        md="4"
+                    >
+                      <v-card-text> Ticari Bilgiler</v-card-text>
+                      <v-combobox
+                          label="Firma Tipi"
+                          persistent-hint
+                          v-model="firmaTipi"
+                          :items="firmTypes"
+                      ></v-combobox>
 
-      <v-col
-          class="d-flex"
-          cols="12"
-          sm="6"
-      >
-        <v-select
-            :items="items"
-            filled
-            label="Filled style"
-        ></v-select>
-      </v-col>
+                      <v-text-field
+                          label="Firma Adı"
+                          v-model="firmaAdi"
+                          required
+                      ></v-text-field>
 
-      <v-col
-          class="d-flex"
-          cols="12"
-          sm="6"
-      >
-        <v-select
-            :items="items"
-            label="Outlined style"
-            outlined
-        ></v-select>
-      </v-col>
+                      <v-text-field
+                          label="Kimlik No"
+                          v-model="kimlikNo"
+                          :rules="kimlikRules"
+                          required
+                      ></v-text-field>
 
-      <v-col
-          class="d-flex"
-          cols="12"
-          sm="6"
-      >
-        <v-select
-            :items="items"
-            label="Solo field"
-            solo
-        ></v-select>
-      </v-col>
-    </v-row>
-  </v-container>
+                      <v-text-field
+                          label="Vergi Departmanı"
+                          v-model="vdepartmani"
+                          :rules="generalRules"
+                          required
+                      ></v-text-field>
+
+                      <v-text-field
+                          label="Firma Adresi"
+                          v-model="firmaddr"
+                          :rules="generalRules"
+                          required
+                      ></v-text-field>
+
+                      <v-combobox
+                          label="Doğum Yeri"
+                          persistent-hint
+                          v-model="dyeri"
+                          :items="sehirler"
+                      ></v-combobox>
+
+                      <v-combobox
+                          persistent-hint
+                          label="İletişim Personeli"
+                          v-model="firmcontact"
+                          :items="syspersonnels"
+                      ></v-combobox>
+
+                    </v-col>
+
+                    <v-col>
+                      <v-card-text>Firma Bilgileri</v-card-text>
+                      <v-text-field
+                          v-model="sektor"
+                          :rules="generalRules"
+                          label="Sektör"
+                          required
+                      ></v-text-field>
+
+                      <v-combobox
+                          persistent-hint
+                          label="Şehir"
+                          v-model="sehir"
+                          :items="sehirler"
+                      ></v-combobox>
+
+                      <v-combobox
+                          persistent-hint
+                          label="İlçe"
+                          v-model="ilce"
+                          :items="ilceler"
+                      ></v-combobox>
+                      <br>
+
+                      <v-container id="attachmentsTicaret">
+                        <v-file-input
+                            accept="image/*"
+                            label="Faaliyet Belgesi"
+                        ></v-file-input>
+
+                        <v-file-input
+                            accept="image/*"
+                            label="Vergi Beyannamesi"
+                        ></v-file-input>
+
+                        <v-file-input
+                            accept="image/*"
+                            label="İmza Sirküleri"
+                        ></v-file-input>
+                      </v-container>
+                    </v-col>
+
+                    <!--        İletişim bilgileri-->
+                    <v-col
+                        cols="12"
+                        md="4"
+                    >
+                      <v-card-text>İletişim Bilgileri</v-card-text>
+                      <v-text-field
+                          v-model="email_addr"
+                          :rules="emailRules"
+                          label="E-mail"
+                          required
+                      ></v-text-field>
+
+
+                      <v-text-field
+                          v-model="telno"
+                          :rules="telnoRules"
+                          label="Telefon"
+                          required
+                      ></v-text-field>
+
+                      <v-text-field
+                          v-model="fax"
+                          label="Fax"
+                          required
+                      ></v-text-field>
+
+                      <v-container id="attachmentsPartnership">
+                        <v-file-input
+                            accept="image/*"
+                            label="Ortaklık yapısı ve kimlik kopyaları"
+                        ></v-file-input>
+
+                        <v-file-input
+                            accept="image/*"
+                            label="Kimlik kopyaları"
+                        ></v-file-input>
+
+                        <v-file-input
+                            accept="image/*"
+                            label="Yönetim kurulu yapısı"
+                        ></v-file-input>
+                      </v-container>
+
+                    </v-col>
+
+                  </v-row>
+                </v-container>
+              </v-card-text>
+
+              <v-card-actions>
+                <v-spacer></v-spacer>
+                <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="close"
+                >
+                  Temizle
+                </v-btn>
+                <v-btn
+                    color="blue darken-1"
+                    text
+                    @click="save"> Kaydet
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+
+        <v-expansion-panel id="RUD Form">
+          <v-expansion-panel-header>
+            Cari Hesaplar
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-data-table
+                :headers="accountColumns"
+                :items="accountValues"
+                sort-by="firmaAdi"
+                class="elevation-1"
+            >
+              <template v-slot:top>
+                <v-toolbar
+                    flat
+                >
+                  <v-toolbar-title>My CRUD</v-toolbar-title>
+                  <v-divider
+                      class="mx-4"
+                      inset
+                      vertical
+                  ></v-divider>
+                  <v-spacer></v-spacer>
+                  <v-dialog
+                      v-model="dialog"
+                      max-width="500px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-btn
+                          color="primary"
+                          dark
+                          class="mb-2"
+                          v-bind="attrs"
+                          v-on="on"
+                      >
+                        New Item
+                      </v-btn>
+                    </template>
+                    <v-card>
+                      <v-card-title>
+                        <span class="headline">{{ formTitle }}</span>
+                      </v-card-title>
+
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
+                            <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                            >
+                              <v-text-field
+                                  v-model="editedItem.firmaTipi"
+                                  label="Firma Tipi"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                            >
+                              <v-text-field
+                                  v-model="editedItem.firmaAdi"
+                                  label="Firma Adı"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                            >
+                              <v-text-field
+                                  v-model="editedItem.kimlikNo"
+                                  label="Kimlik No"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                            >
+                              <v-text-field
+                                  v-model="editedItem.dyeri"
+                                  label="Doğum Yeri"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                            >
+                              <v-text-field
+                                  v-model="editedItem.vdepartmani"
+                                  label="Vergi Departmanı"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                            >
+                              <v-text-field
+                                  v-model="editedItem.firmaddr"
+                                  label="Firma Adresi"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                            >
+                              <v-text-field
+                                  v-model="editedItem.firmcontact"
+                                  label="Firma Contact"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                            >
+                              <v-text-field
+                                  v-model="editedItem.sektor"
+                                  label="Sektör"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                            >
+                              <v-text-field
+                                  v-model="editedItem.sehir"
+                                  label="Şehir"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                            >
+                              <v-text-field
+                                  v-model="editedItem.ilce"
+                                  label="İlçe"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                            >
+                              <v-text-field
+                                  v-model="editedItem.telno"
+                                  label="Tel No"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                            >
+                              <v-text-field
+                                  v-model="editedItem.fax"
+                                  label="Fax"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                            >
+                              <v-text-field
+                                  v-model="editedItem.web_url"
+                                  label="Vergi Departmanı"
+                              ></v-text-field>
+                            </v-col>
+                            <v-col
+                                cols="12"
+                                sm="6"
+                                md="4"
+                            >
+                              <v-text-field
+                                  v-model="editedItem.email_addr"
+                                  label="Email"
+                              ></v-text-field>
+                            </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="close"
+                        >
+                          İptal
+                        </v-btn>
+                        <v-btn
+                            color="blue darken-1"
+                            text
+                            @click="save"
+                        >
+                          Kaydet
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                  <v-dialog v-model="dialogDelete" max-width="500px">
+                    <v-card>
+                      <v-card-title class="headline">Bu kaydı silmek istiyor musunuz?</v-card-title>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn color="blue darken-1" text @click="closeDelete">İptal</v-btn>
+                        <v-btn color="blue darken-1" text @click="deleteItemConfirm">Tamam</v-btn>
+                        <v-spacer></v-spacer>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-toolbar>
+              </template>
+
+              <template v-slot:item.actions="{ item }">
+                <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(item)"
+                >
+                  mdi-pencil
+                </v-icon>
+                <v-icon
+                    small
+                    @click="deleteItem(item)"
+                >
+                  mdi-delete
+                </v-icon>
+              </template>
+
+              <template v-slot:no-data>
+                <v-btn
+                    color="primary"
+                    @click="initialize"
+                >
+                  Reset
+                </v-btn>
+              </template>
+            </v-data-table>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      </v-expansion-panels>
+
+    </div>
+  </v-form>
 </template>
 
 <script>
+import axios from 'axios';
+
+const API_URL = 'http://127.0.0.1:8000/checkaccount/api';
+
 export default {
+
+  name: "CheckAccount",
   data: () => ({
-    items: ['Foo', 'Bar', 'Fizz', 'Buzz'],
+    valid: false,
+    dialog: false,
+    firmaTipi: '',
+    firmaAdi: '',
+    kimlikNo: '',
+    dyeri: '',
+    vdepartmani: '',
+    firmaddr: '',
+    firmcontact: '',
+    sektor: '',
+    sehir: '',
+    ilce: '',
+    telno: '',
+    fax: '',
+    web_url: '',
+    email_addr: '',
+
+    generalRules: [
+      v => !!v || 'Bu alan boş bırakılamaz !',
+    ],
+
+    kimlikRules: [
+      v => !!v || 'Kimlik No gereklidir',
+      v => v.length !== 11 || 'Kimlik numarası 11 haneden farklı olamaz !'
+    ],
+
+    nameRules: [
+      v => !!v || 'Name is required',
+      v => v.length <= 10 || 'Name must be less than 10 characters',
+    ],
+
+    emailRules: [
+      v => !!v || 'E-mail is required',
+      v => /.+@.+/.test(v) || 'E-mail must be valid',
+    ],
+
+    telnoRules: [
+      v => !!v || 'Telefon numarası gereklidir',
+      v => v.length !== 10 || '10 haneli telefon numaranızı giriniz '
+    ],
+
+
+    // API'dan alinan veriler
+    firmTypes: [
+      'Tüzel Kişilik',
+      'Şahıs İşletmesi',
+    ],
+
+    sehirler: [],
+
+    ilceler: [],
+
+    syspersonnels: [],
+
+    accountColumns: [
+      {
+        text: 'Firma Adı',
+        align: 'start',
+        value: 'firmaAdi',
+      },
+      {text: 'Firma Tipi', value: 'firmaTipi'},
+      {text: 'Kimlik No', value: 'kimlikNo'},
+      {text: 'Doğum Yeri', value: 'dyeri'},
+      {text: 'Vergi Departmanı', vdepartmani: 'protein'},
+      {text: 'Firma Adresi', firmaddr: 'iron'},
+      {text: 'Firma İletişim', firmcontact: 'iron'},
+      {text: 'Sektör', value: 'sektor'},
+      {text: 'Şehir', value: 'sehir'},
+      {text: 'İlçe', value: 'ilce'},
+      {text: 'Tel', value: 'telno'},
+      {text: 'Fax', value: 'fax'},
+      {text: 'Web', value: 'iron'},
+      {text: 'Email', value: 'email_addr'},
+      {text: 'Aksiyonlar', value: 'actions', sortable: false},
+    ],
+
+    accountValues: [
+      {}
+    ],
+
+
+    defaultItem: {
+      firmaAdi: '',
+      firmaTipi: '',
+      kimlikNo: '',
+      dyeri: '',
+      vdepartmani: '',
+      firmaddr: '',
+      firmcontact: '',
+      sektor: '',
+      sehir: '',
+      ilce: '',
+      telno: '',
+      fax: '',
+      email_addr: ''
+    },
+
   }),
+
+  computed: {
+    formTitle() {
+      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+    },
+  },
+
+  watch: {
+    dialog(val) {
+      val || this.close()
+    },
+    dialogDelete(val) {
+      val || this.closeDelete()
+    },
+  },
+
+  created() {
+    this.initialize()
+  },
+
+  mounted() {
+    this.setaccounts();
+  },
+
+  methods: {
+    setaccounts() {
+      // servise istek atip yazacagimiz yer
+      axios.get(API_URL + '/accounts/')
+          .then((response) => {
+            console.log(response);
+
+            this.accountValues = response;
+          })
+
+
+    },
+
+    initialize() {
+      // accountlar
+      this.setaccounts();
+
+      // test degerleri
+      this.accountValues = [
+        {
+          firmaAdi: 'Umut A.Ş.',
+          firmaTipi: 'Şahıs',
+          kimlikNo: '13244112113',
+          dyeri: 'Çorum',
+          vdepartmani: 'Ümraniye Vergi Dairesi',
+          firmaddr: 'a b c',
+          firmcontact: 'Salim O.',
+          sektor: 'IT',
+          sehir: 'İstanbul',
+          ilce: 'Ümraniye',
+          telno: '+90 505 238 19 51',
+          fax: '+212 143 13 32',
+          email_addr: 'uucok@sirket.com.tr'
+        },
+        {
+          firmaAdi: 'Ahmet A.Ş.',
+          firmaTipi: 'Tüzel',
+          kimlikNo: '17318665774',
+          dyeri: null,
+          vdepartmani: 'Ümraniye Vergi Dairesi',
+          firmaddr: 'a b c',
+          firmcontact: 'Salim O.',
+          sektor: 'IT',
+          sehir: 'İstanbul',
+          ilce: 'Ümraniye',
+          telno: '+90 505 238 19 51',
+          fax: '+212 143 13 32',
+          email_addr: 'uucok@sirket.com.tr'
+        },
+      ]
+    },
+
+
+    editItem(item) {
+      this.editedIndex = this.accountValues.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialog = true
+    },
+
+    deleteItem(item) {
+      this.editedIndex = this.accountValues.indexOf(item)
+      this.editedItem = Object.assign({}, item)
+      this.dialogDelete = true
+    },
+
+    deleteItemConfirm() {
+      this.accountValues.splice(this.editedIndex, 1)
+      this.closeDelete()
+    },
+
+    close() {
+      this.dialog = false
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      })
+    },
+
+    closeDelete() {
+      this.dialogDelete = false
+      this.$nextTick(() => {
+        this.editedItem = Object.assign({}, this.defaultItem)
+        this.editedIndex = -1
+      })
+    },
+
+    save() {
+      if (this.editedIndex > -1) {
+        Object.assign(this.desserts[this.editedIndex], this.editedItem)
+      } else {
+        this.desserts.push(this.editedItem)
+      }
+      this.close()
+    },
+  }
 }
 </script>
 
-<style>
+<style scoped>
 
 </style>

@@ -7,8 +7,9 @@
   >
     <template v-slot:top>
       <v-toolbar
-          flat>
-        <v-toolbar-title>Cari Hesap Aç</v-toolbar-title>
+          flat
+      >
+        <v-toolbar-title>My CRUD</v-toolbar-title>
         <v-divider
             class="mx-4"
             inset

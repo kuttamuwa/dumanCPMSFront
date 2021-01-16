@@ -8,7 +8,6 @@
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-card>
-
               <v-card-text>
                 <v-container>
                   <v-row>
@@ -188,8 +187,23 @@
                 :headers="accountColumns"
                 :items="accountValues"
                 :items-per-page="5"
-                class="elevation-1"
-            ></v-data-table>
+                class="elevation-1">
+              <template v-slot:item.actions="{ item }">
+                <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(item)"
+                >
+                  mdi-pencil
+                </v-icon>
+                <v-icon
+                    small
+                    @click="deleteItem(item)"
+                >
+                  mdi-delete
+                </v-icon>
+              </template>
+            </v-data-table>
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
@@ -208,7 +222,7 @@ export default {
   name: "CheckAccount",
   data: () => ({
     valid: false,
-
+    dialog: false,
     firmaTipi: '',
     firmaAdi: '',
     kimlikNo: '',
@@ -280,39 +294,11 @@ export default {
       {text: 'Fax', value: 'fax'},
       {text: 'Web', value: 'iron'},
       {text: 'Email', value: 'email_addr'},
+      {text: 'Aksiyonlar', value: 'actions', sortable: false},
     ],
 
     accountValues: [
-      {
-        firmaAdi: 'Umut A.Ş.',
-        firmaTipi: 'Şahıs',
-        kimlikNo: '13244112113',
-        dyeri: 'Çorum',
-        vdepartmani: 'Ümraniye Vergi Dairesi',
-        firmaddr: 'a b c',
-        firmcontact: 'Salim O.',
-        sektor: 'IT',
-        sehir: 'İstanbul',
-        ilce: 'Ümraniye',
-        telno: '+90 505 238 19 51',
-        fax: '+212 143 13 32',
-        email_addr: 'uucok@sirket.com.tr'
-      },
-      {
-        firmaAdi: 'Ahmet A.Ş.',
-        firmaTipi: 'Tüzel',
-        kimlikNo: '17318665774',
-        dyeri: null,
-        vdepartmani: 'Ümraniye Vergi Dairesi',
-        firmaddr: 'a b c',
-        firmcontact: 'Salim O.',
-        sektor: 'IT',
-        sehir: 'İstanbul',
-        ilce: 'Ümraniye',
-        telno: '+90 505 238 19 51',
-        fax: '+212 143 13 32',
-        email_addr: 'uucok@sirket.com.tr'
-      },
+      {}
     ],
 
 

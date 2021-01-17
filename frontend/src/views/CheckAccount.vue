@@ -243,9 +243,8 @@
 </template>
 
 <script>
-const API_URL = 'http://127.0.0.1:8000/checkaccount/api';
+const API_URL = "http://127.0.0.1:8000/checkaccount/api/accounts/?format=json";
 const axios = require('axios').default;
-import Cookies from "js-cookie";
 
 axios.defaults.xsrfHeaderName = "X-CSRFToken";
 axios.defaults.xsrfCookieName = "csrftoken";
@@ -266,19 +265,19 @@ export default {
       'Şahıs İşletmesi'],
 
     accountColumns: [
-      {text: 'Firma Adı', align: 'start', value: 'firmaAdi'},
-      {text: 'Firma Tipi', value: 'firmaTipi'},
-      {text: 'Kimlik No', value: 'kimlikNo'},
-      {text: 'Doğum Yeri', value: 'dyeri'},
-      {text: 'Vergi Departmanı', vdepartmani: 'protein'},
-      {text: 'Firma Adresi', firmaddr: 'iron'},
-      {text: 'Firma İletişim', firmcontact: 'iron'},
-      {text: 'Sektör', value: 'sektor'},
-      {text: 'Şehir', value: 'sehir'},
-      {text: 'İlçe', value: 'ilce'},
-      {text: 'Tel', value: 'telno'},
+      {text: 'Firma Adı', align: 'start', value: 'firm_full_name'},
+      {text: 'Firma Tipi', value: 'firm_type'},
+      {text: 'Kimlik No', value: 'taxpayer_number'},
+      {text: 'Doğum Yeri', value: 'birthplace'},
+      {text: 'Vergi Departmanı', vdepartmani: 'tax_department'},
+      {text: 'Firma Adresi', firmaddr: 'firm_address'},
+      {text: 'Firma İletişim', firmcontact: 'firm_key_contact_personnel'},
+      {text: 'Sektör', value: 'sector'},
+      {text: 'Şehir', value: 'city'},
+      {text: 'İlçe', value: 'district'},
+      {text: 'Tel', value: 'phone_number'},
       {text: 'Fax', value: 'fax'},
-      {text: 'Web', value: 'iron'},
+      {text: 'Web', value: 'web_url'},
       {text: 'Email', value: 'email_addr'},
       {text: 'Aksiyonlar', value: 'actions', sortable: false},
     ],
@@ -347,69 +346,12 @@ export default {
   },
 
   methods: {
-    initialize() {
-      this.accountValues = [
-        {
-          firmaAdi: 'Umut A.Ş.',
-          firmaTipi: 'Şahıs',
-          kimlikNo: '13244112113',
-          dyeri: 'Çorum',
-          vdepartmani: 'Ümraniye Vergi Dairesi',
-          firmaddr: 'a b c',
-          firmcontact: 'Salim O.',
-          sektor: 'IT',
-          sehir: 'İstanbul',
-          ilce: 'Ümraniye',
-          telno: '+90 505 238 19 51',
-          fax: '+212 143 13 32',
-          email_addr: 'uucok@sirket.com.tr'
-        },
-        {
-          firmaAdi: 'Ahmet A.Ş.',
-          firmaTipi: 'Tüzel',
-          kimlikNo: '17318665774',
-          dyeri: null,
-          vdepartmani: 'Ümraniye Vergi Dairesi',
-          firmaddr: 'a b c',
-          firmcontact: 'Salim O.',
-          sektor: 'IT',
-          sehir: 'İstanbul',
-          ilce: 'Ümraniye',
-          telno: '+90 505 238 19 51',
-          fax: '+212 143 13 32',
-          email_addr: 'uucok@sirket.com.tr'
-        },
-      ]
-    },
-
-    getDataFromApi() {
+    async getDataFromApi() {
       console.log("Naber")
-      var url = API_URL + '/accounts/';
-      console.log(url);
-      var r = axios.create({
-            timeout: 5000,
-            baseURL: url,
-            headers: {
-              "Content-Type": "application/json",
-              "X-CSRFToken": Cookies.get('csrftoken')
-            }
-          }
-      );
-
-      r.get(url)
-          .then(function (response) {
-            // handle success
-            console.log(response);
-          })
-          .catch(function (error) {
-            // handle error
-            console.log(error);
-          })
-          .then(function () {
-            // always executed
-          });
-
-
+      console.log(API_URL);
+      const response = await axios.get(API_URL)
+      console.log(response.data);
+      this.accountValues = response.data
     },
 
     editItem(item) {

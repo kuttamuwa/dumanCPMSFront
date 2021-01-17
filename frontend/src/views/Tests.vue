@@ -19,33 +19,33 @@
                       <v-combobox
                           label="Firma Tipi"
                           persistent-hint
-                          v-model="firmaTipi"
+                          v-model="firm_type"
                           :items="firmTypes"
                       ></v-combobox>
 
                       <v-text-field
                           label="Firma Adı"
-                          v-model="firmaAdi"
+                          v-model="firm_full_name"
                           required
                       ></v-text-field>
 
                       <v-text-field
                           label="Kimlik No"
-                          v-model="kimlikNo"
+                          v-model="taxpayer_number"
                           :rules="kimlikRules"
                           required
                       ></v-text-field>
 
                       <v-text-field
                           label="Vergi Departmanı"
-                          v-model="vdepartmani"
+                          v-model="tax_department"
                           :rules="generalRules"
                           required
                       ></v-text-field>
 
                       <v-text-field
                           label="Firma Adresi"
-                          v-model="firmaddr"
+                          v-model="firm_address"
                           :rules="generalRules"
                           required
                       ></v-text-field>
@@ -53,14 +53,14 @@
                       <v-combobox
                           label="Doğum Yeri"
                           persistent-hint
-                          v-model="dyeri"
+                          v-model="birthplace"
                           :items="sehirler"
                       ></v-combobox>
 
                       <v-combobox
                           persistent-hint
                           label="İletişim Personeli"
-                          v-model="firmcontact"
+                          v-model="firm_key_contact_personnel"
                           :items="syspersonnels"
                       ></v-combobox>
 
@@ -69,7 +69,7 @@
                     <v-col>
                       <v-card-text>Firma Bilgileri</v-card-text>
                       <v-text-field
-                          v-model="sektor"
+                          v-model="sector"
                           :rules="generalRules"
                           label="Sektör"
                           required
@@ -78,14 +78,14 @@
                       <v-combobox
                           persistent-hint
                           label="Şehir"
-                          v-model="sehir"
+                          v-model="city"
                           :items="sehirler"
                       ></v-combobox>
 
                       <v-combobox
                           persistent-hint
                           label="İlçe"
-                          v-model="ilce"
+                          v-model="district"
                           :items="ilceler"
                       ></v-combobox>
                       <br>
@@ -121,9 +121,8 @@
                           required
                       ></v-text-field>
 
-
                       <v-text-field
-                          v-model="telno"
+                          v-model="phone_number"
                           :rules="telnoRules"
                           label="Telefon"
                           required
@@ -174,10 +173,9 @@
                 </v-btn>
               </v-card-actions>
             </v-card>
-
           </v-expansion-panel-content>
         </v-expansion-panel>
-
+        <v-divider></v-divider>
         <v-expansion-panel id="RUD Form">
           <v-expansion-panel-header>
             Cari Hesaplar
@@ -191,9 +189,8 @@
             >
               <template v-slot:top>
                 <v-toolbar
-                    flat
-                >
-                  <v-toolbar-title>My CRUD</v-toolbar-title>
+                    flat>
+                  <v-toolbar-title>Cari Hesap Aç</v-toolbar-title>
                   <v-divider
                       class="mx-4"
                       inset
@@ -204,17 +201,6 @@
                       v-model="dialog"
                       max-width="500px"
                   >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-btn
-                          color="primary"
-                          dark
-                          class="mb-2"
-                          v-bind="attrs"
-                          v-on="on"
-                      >
-                        New Item
-                      </v-btn>
-                    </template>
                     <v-card>
                       <v-card-title>
                         <span class="headline">{{ formTitle }}</span>
@@ -428,33 +414,34 @@
           </v-expansion-panel-content>
         </v-expansion-panel>
       </v-expansion-panels>
-
     </div>
   </v-form>
 </template>
 
 <script>
-import axios from 'axios';
+const API_URL = "http://127.0.0.1:8000/checkaccount/api/accounts/?format=json";
+const axios = require('axios').default;
 
-const API_URL = 'http://127.0.0.1:8000/checkaccount/api';
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
+axios.defaults.xsrfCookieName = "csrftoken";
 
 export default {
-
-  name: "CheckAccount",
+  name: 'CheckAccount',
   data: () => ({
-    valid: false,
     dialog: false,
-    firmaTipi: '',
-    firmaAdi: '',
-    kimlikNo: '',
-    dyeri: '',
-    vdepartmani: '',
-    firmaddr: '',
-    firmcontact: '',
-    sektor: '',
-    sehir: '',
-    ilce: '',
-    telno: '',
+    dialogDelete: false,
+
+    firm_full_name: '',
+    firm_type: '',
+    taxpayer_number: '',
+    birthplace: '',
+    tax_department: '',
+    firm_address: '',
+    firm_key_contact_personnel: '',
+    sector: '',
+    city: '',
+    district: '',
+    phone_number: '',
     fax: '',
     web_url: '',
     email_addr: '',
@@ -483,37 +470,30 @@ export default {
       v => v.length !== 10 || '10 haneli telefon numaranızı giriniz '
     ],
 
-
-    // API'dan alinan veriler
-    firmTypes: [
-      'Tüzel Kişilik',
-      'Şahıs İşletmesi',
-    ],
-
     sehirler: [],
 
     ilceler: [],
 
     syspersonnels: [],
 
+    firmTypes: [
+      'Tüzel Kişilik',
+      'Şahıs İşletmesi'],
+
     accountColumns: [
-      {
-        text: 'Firma Adı',
-        align: 'start',
-        value: 'firmaAdi',
-      },
-      {text: 'Firma Tipi', value: 'firmaTipi'},
-      {text: 'Kimlik No', value: 'kimlikNo'},
-      {text: 'Doğum Yeri', value: 'dyeri'},
-      {text: 'Vergi Departmanı', vdepartmani: 'protein'},
-      {text: 'Firma Adresi', firmaddr: 'iron'},
-      {text: 'Firma İletişim', firmcontact: 'iron'},
-      {text: 'Sektör', value: 'sektor'},
-      {text: 'Şehir', value: 'sehir'},
-      {text: 'İlçe', value: 'ilce'},
-      {text: 'Tel', value: 'telno'},
+      {text: 'Firma Adı', align: 'start', value: 'firm_full_name'},
+      {text: 'Firma Tipi', value: 'firm_type'},
+      {text: 'Kimlik No', value: 'taxpayer_number'},
+      {text: 'Doğum Yeri', value: 'birthplace'},
+      {text: 'Vergi Departmanı', vdepartmani: 'tax_department'},
+      {text: 'Firma Adresi', firmaddr: 'firm_address'},
+      {text: 'Firma İletişim', firmcontact: 'firm_key_contact_personnel'},
+      {text: 'Sektör', value: 'sector'},
+      {text: 'Şehir', value: 'city'},
+      {text: 'İlçe', value: 'district'},
+      {text: 'Tel', value: 'phone_number'},
       {text: 'Fax', value: 'fax'},
-      {text: 'Web', value: 'iron'},
+      {text: 'Web', value: 'web_url'},
       {text: 'Email', value: 'email_addr'},
       {text: 'Aksiyonlar', value: 'actions', sortable: false},
     ],
@@ -522,30 +502,42 @@ export default {
       {}
     ],
 
-
     defaultItem: {
-      firmaAdi: '',
-      firmaTipi: '',
-      kimlikNo: '',
-      dyeri: '',
-      vdepartmani: '',
-      firmaddr: '',
-      firmcontact: '',
-      sektor: '',
-      sehir: '',
-      ilce: '',
-      telno: '',
+      firm_full_name: '',
+      firm_type: '',
+      taxpayer_number: '',
+      birthplace: '',
+      tax_department: '',
+      firm_address: '',
+      firm_key_contact_personnel: '',
+      sector: '',
+      city: '',
+      district: '',
+      phone_number: '',
       fax: '',
-      email_addr: ''
+      web_url: '',
+      email_addr: '',
     },
 
+    editedIndex: -1,
+
+    editedItem: {
+      firm_full_name: '',
+      firm_type: '',
+      taxpayer_number: '',
+      birthplace: '',
+      tax_department: '',
+      firm_address: '',
+      firm_key_contact_personnel: '',
+      sector: '',
+      city: '',
+      district: '',
+      phone_number: '',
+      fax: '',
+      web_url: '',
+      email_addr: '',
+    },
   }),
-
-  computed: {
-    formTitle() {
-      return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
-    },
-  },
 
   watch: {
     dialog(val) {
@@ -561,61 +553,17 @@ export default {
   },
 
   mounted() {
-    this.setaccounts();
+    this.getDataFromApi();
   },
 
   methods: {
-    setaccounts() {
-      // servise istek atip yazacagimiz yer
-      axios.get(API_URL + '/accounts/')
-          .then((response) => {
-            console.log(response);
-
-            this.accountValues = response;
-          })
-
-
+    async getDataFromApi() {
+      console.log("Naber")
+      console.log(API_URL);
+      const response = await axios.get(API_URL)
+      console.log(response.data);
+      this.accountValues = response.data
     },
-
-    initialize() {
-      // accountlar
-      this.setaccounts();
-
-      // test degerleri
-      this.accountValues = [
-        {
-          firmaAdi: 'Umut A.Ş.',
-          firmaTipi: 'Şahıs',
-          kimlikNo: '13244112113',
-          dyeri: 'Çorum',
-          vdepartmani: 'Ümraniye Vergi Dairesi',
-          firmaddr: 'a b c',
-          firmcontact: 'Salim O.',
-          sektor: 'IT',
-          sehir: 'İstanbul',
-          ilce: 'Ümraniye',
-          telno: '+90 505 238 19 51',
-          fax: '+212 143 13 32',
-          email_addr: 'uucok@sirket.com.tr'
-        },
-        {
-          firmaAdi: 'Ahmet A.Ş.',
-          firmaTipi: 'Tüzel',
-          kimlikNo: '17318665774',
-          dyeri: null,
-          vdepartmani: 'Ümraniye Vergi Dairesi',
-          firmaddr: 'a b c',
-          firmcontact: 'Salim O.',
-          sektor: 'IT',
-          sehir: 'İstanbul',
-          ilce: 'Ümraniye',
-          telno: '+90 505 238 19 51',
-          fax: '+212 143 13 32',
-          email_addr: 'uucok@sirket.com.tr'
-        },
-      ]
-    },
-
 
     editItem(item) {
       this.editedIndex = this.accountValues.indexOf(item)
@@ -630,7 +578,7 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.accountValues.splice(this.editedIndex, 1)
+      this.desserts.splice(this.editedIndex, 1)
       this.closeDelete()
     },
 
@@ -652,13 +600,13 @@ export default {
 
     save() {
       if (this.editedIndex > -1) {
-        Object.assign(this.desserts[this.editedIndex], this.editedItem)
+        Object.assign(this.accountValues[this.editedIndex], this.editedItem)
       } else {
-        this.desserts.push(this.editedItem)
+        this.accountValues.push(this.editedItem)
       }
       this.close()
     },
-  }
+  },
 }
 </script>
 

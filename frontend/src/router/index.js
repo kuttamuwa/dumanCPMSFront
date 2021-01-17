@@ -48,8 +48,8 @@ const routes = [
 
     {
         path:'/crudtests',
-        name: 'crudtest',
-        component: () => import('../views/crudtest')
+        name: 'crudtests',
+        component: () => import('../views/PastCheckAccount')
     },
 
     {

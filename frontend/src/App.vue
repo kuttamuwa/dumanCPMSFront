@@ -74,7 +74,7 @@ export default {
           {title: 'Admin & Config', icon: 'mdi-cog-outline', to: '/appconfig'},
 
           {title: "Tests", icon: "mdi-test", to:'/tests'},
-          {title: "Crud Test", icon: "mdi-test", to:'/crudtests'}
+          {title: "Crud Test", icon: "mdi-test", to:'/PastCheckAccount'}
         ],
       }),
 }

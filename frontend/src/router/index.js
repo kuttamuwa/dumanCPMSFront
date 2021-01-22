@@ -47,12 +47,6 @@ const routes = [
     },
 
     {
-        path:'/crudtests',
-        name: 'crudtests',
-        component: () => import('../views/PastCheckAccount')
-    },
-
-    {
         path: '/about',
         name: 'About',
         // route level code-splitting

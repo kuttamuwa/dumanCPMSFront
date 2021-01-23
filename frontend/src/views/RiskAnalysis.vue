@@ -61,9 +61,9 @@
                 <v-icon
                     small
                     class="mr-2"
-                    @click="editItem(item)"
+                    @click="analyzeItem(item)"
                 >
-                  mdi-pencil
+                  mdi-tools
                 </v-icon>
               </template>
             </v-data-table>
@@ -77,7 +77,6 @@
 
 <script>
 const RISKDATASET_API = "http://127.0.0.1:8000/riskanalysis/api/dataset/?format=json";
-const POINTS_API = "http://127.0.0.1:8000/riskanalysis/api/points/?format=json";
 
 const axios = require('axios').default;
 
@@ -109,7 +108,7 @@ export default {
       {text: 'Ortalama Gecikme Gün Bakiyesi', value: 'ort_gecikme_gun_bakiyesi'},
       {text: 'Bakiye', value: 'bakiye'},
       {text: 'Analiz Puanı', value: 'general_point'},
-      {text: 'Analizler', value: 'actions', sortable: false},
+      {text: 'Analiz Et', value: 'actions', sortable: false},
     ],
 
     defaultItem: {
@@ -189,37 +188,16 @@ export default {
     },
 
 
-    editItem(item) {
-      this.editedIndex = this.riskdatasetValues.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialog = true
-    },
+    async analyzeItem(item) {
+      let index = this.riskdatasetValues.indexOf(item);
+      let pk = this.riskdatasetValues[index].data_id;
+      console.log(pk);
+      const ANALYZE_POINT_API = "http://127.0.0.1:8000/riskanalysis/api/points/" + "?riskdataset_pk=" + pk + "&again=True"
+      const response = await axios.post(ANALYZE_POINT_API)
 
-    deleteItem(item) {
-      this.editedIndex = this.riskdatasetValues.indexOf(item)
-      this.editedItem = Object.assign({}, item)
-      this.dialogDelete = true
-    },
-
-    deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1)
-      this.closeDelete()
-    },
-
-    close() {
-      this.dialog = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
-    },
-
-    closeDelete() {
-      this.dialogDelete = false
-      this.$nextTick(() => {
-        this.editedItem = Object.assign({}, this.defaultItem)
-        this.editedIndex = -1
-      })
+      let point = response.data
+      console.log("Alınan puan : " + point);
+      this.riskdatasetValues[index].general_point = point
     },
 
     save() {

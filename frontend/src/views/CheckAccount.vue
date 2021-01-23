@@ -1,6 +1,6 @@
 <template>
   <v-form v-model="valid">
-    <div id="createCheckAccount">
+    <div id="checkAccountCRUD">
       <v-expansion-panels>
         <v-expansion-panel id="creationForm">
           <v-expansion-panel-header>
@@ -80,6 +80,7 @@
                           label="Şehir"
                           v-model="city"
                           :items="sehirler"
+                          @click="getDistrict"
                       ></v-combobox>
 
                       <v-combobox
@@ -455,10 +456,10 @@ export default {
     email_addr: 'ucok.umut@gmail.com',
 
     // documents
-    // partnershipDoc: '',
-    // faaliyetDoc: '',
-    // vergiDoc: '',
-    // imzaDoc: '',
+    partnershipDoc: '',
+    faaliyetDoc: '',
+    vergiDoc: '',
+    imzaDoc: '',
 
     generalRules: [
       v => !!v || 'Bu alan boş bırakılamaz !',
@@ -570,28 +571,42 @@ export default {
 
   mounted() {
     this.getDataFromApi();
+
   },
 
   methods: {
     async getAccounts() {
       const response = await axios.get(ACCOUNT_API)
+      console.log(response.data);
       this.accountValues = response.data
     },
 
     async getCities() {
-      const response = await axios.get(ACCOUNT_API + "/cities/?format=json")
-      this.sehirler = response.data;
+      const response = await axios.get(CITY_API)
+      let data = response.data;
+      this.sehirler = data.map(function (item) { return item.name })
+      console.log("Sehirler yuklendi");
     },
 
-    async getDistrict(cityName) {
+    async getDistrict() {
+      let cityName = this.city
       const DISTRICT_API = "http://127.0.0.1:8000/checkaccount/api/district/?city=" + cityName;
-      const response = await axios.get(ACCOUNT_API + "/district/?format=json?city=" + cityName);
-      this.ilceler = response.data;
+      const response = await axios.get(DISTRICT_API)
+      this.ilceler = response.data.map(function (item) {return item.name});
+      console.log(cityName + "için ilçeler çekildi")
+    },
 
+    async getSysPersonnels() {
+      const PERSONNEL_API = "http://127.0.0.1:8000/checkaccount/api/syspersonnels/?format=json"
+      const response = await axios.get(PERSONNEL_API);
+      this.syspersonnels = response.data.map(function (item) {return item.username})
+      console.log("Personel listesi yüklendi");
     },
 
     async getDataFromApi() {
       await this.getAccounts();
+      await this.getCities();
+      await this.getSysPersonnels();
 
     },
 
@@ -641,32 +656,12 @@ export default {
         this.accountValues.push(this.editedItem)
       }
 
-      // API'ye istek
-      // console.log(this.editedItem.firm_type);
-      // const response = await axios.post(API_URL,{
-      //   firm_full_name: this.editedItem.firm_full_name,
-      //   firm_type: this.editedItem.firm_type,
-      //   taxpayer_number: this.editedItem.taxpayer_number,
-      //   birthplace: this.editedItem.birthplace,
-      //   tax_department: this.editedItem.tax_department,
-      //   firm_address: this.editedItem.firm_address,
-      //   firm_key_contact_personnel: this.editedItem.firm_key_contact_personnel,
-      //   sector: this.editedItem.sector,
-      //   city: this.editedItem.city,
-      //   district: this.editedItem.district,
-      //   phone_number: this.editedItem.phone_number,
-      //   fax: this.editedItem.fax,
-      //   web_url: this.editedItem.web_url,
-      //   email_addr: this.editedItem.email_addr
-      // })
-      // .then(function (response) {
-      //   console.log(response)
-      // })
-      // .catch(function (error) {
-      //   console.log("error:" + error)
-      // });
-      this.formData()
       console.log(this.defaultItem);
+
+      // file uploading
+      const files = this.file;
+      console.log(files);
+
       const response2 = await axios({
         method: 'post',
         url: ACCOUNT_API,

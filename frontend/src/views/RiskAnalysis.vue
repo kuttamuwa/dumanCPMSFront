@@ -13,7 +13,6 @@
       <v-file-input
           chips
           persistent-hint
-          rules="fileRules"
           hint="Excel verinizi yüklerken sütunların doğru olduğuna emin olunuz."
           label="Risk Analiz verilerinizi yükleyiniz"
       ></v-file-input>
@@ -47,6 +46,14 @@
 </template>
 
 <script>
+const RISKDATASET_API = "http://127.0.0.1:8000/riskanalysis/api/dataset/?format=json";
+const POINTS_API = "http://127.0.0.1:8000/riskanalysis/api/points/?format=json";
+
+const axios = require('axios').default;
+
+axios.defaults.xsrfHeaderName = "X-CSRFToken";
+axios.defaults.xsrfCookieName = "csrftoken";
+
 export default {
   name: "RiskAnalysis",
   data: () => ({
@@ -54,60 +61,62 @@ export default {
     fileRules: [],
 
     riskdatasetColumns: [
-      {text: 'Müşteri', align: 'start', value: 'musteriAdi'},
+      {text: 'Müşteri', align: 'start', value: 'musteri'},
       {text: 'Son 12 Aylık Toplam Ciro', value: 'ciro'},
       {text: 'Limit', value: 'limit'},
-      {text: 'Teminat Durumu', value: 'teminatDurumu'},
-      {text: 'Teminat Tutarı', value: 'teminatTutari'},
+      {text: 'Teminat Durumu', value: 'teminat_durumu'},
+      {text: 'Teminat Tutarı', value: 'teminat_tutari'},
       {text: 'Vade', value: 'vade'},
-      {text: 'Vade Aşımı Ortalaması', value: 'vadeAsimiOr'},
-      {text: 'Ödeme Sıklığı', value: 'odemeSikligi'},
-      {text: '12 Aylık Ortalama Sipariş Tutarı', value: 'siparisTutariOrt12'},
-      {text: '1 Aylık Ortalama Sipariş Tutarı', value: 'sipartisTutariOrt1'},
-      {text: 'Son Ay İade Yüzdesi', value: 'iadeYuzdesi1'},
-      {text: 'Son 12 Ay İade Yüzdesi', value: 'iadeYuzdesi12'},
-      {text: 'Ortalama Gecikme Gün Sayısı', value: 'ortGecikmeGunSayisi'},
-      {text: 'Ortalama Gecikme Gün Bakiyesi', value: 'ortGecikmeGunBakiyesi'},
+      {text: 'Vade Aşımı Ortalaması', value: 'vade_asimi_ortalamasi'},
+      {text: 'Ödeme Sıklığı', value: 'odeme_sikligi'},
+      {text: '12 Aylık Ortalama Sipariş Tutarı', value: 'ort_siparis_tutari_12ay'},
+      {text: '1 Aylık Ortalama Sipariş Tutarı', value: 'ort_siparis_tutari_1ay'},
+      {text: 'Son Ay İade Yüzdesi', value: 'iade_yuzdesi_1'},
+      {text: 'Son 12 Ay İade Yüzdesi', value: 'iade_yuzdesi_12'},
+      {text: 'Ortalama Gecikme Gün Sayısı', value: 'ort_gecikme_gun_sayisi'},
+      {text: 'Ortalama Gecikme Gün Bakiyesi', value: 'ort_gecikme_gun_bakiyesi'},
       {text: 'Bakiye', value: 'bakiye'}
     ],
 
     defaultItem: {
-      musteriAdi: '',
+      musteri: '',
       ciro: '',
       limit: '',
-      teminatDurumu: '',
-      teminatTutari: '',
+      teminat_durumu: '',
+      teminat_tutari: '',
       vade: '',
-      vadeAsimiOr: '',
-      odemeSikligi: '',
-      siparisTutariOrt12: '',
-      sipartisTutariOrt1: '',
-      iadeYuzdesi1: '',
-      iadeYuzdesi12: '',
-      ortGecikmeGunSayisi: '',
-      ortGecikmeGunBakiyesi: '',
+      vade_asimi_ortalamasi: '',
+      odeme_sikligi: '',
+      ort_siparis_tutari_12ay: '',
+      ort_siparis_tutari_1ay: '',
+      iade_yuzdesi_1: '',
+      iade_yuzdesi_12: '',
+      ort_gecikme_gun_sayisi: '',
+      ort_gecikme_gun_bakiyesi: '',
       bakiye: ''
     },
 
-    riskdatasetValues: [],
+    riskdatasetValues: [
+      {}
+    ],
 
     editedIndex: -1,
 
     editedItem: {
-      musteriAdi: '',
+      musteri: '',
       ciro: '',
       limit: '',
-      teminatDurumu: '',
-      teminatTutari: '',
+      teminat_durumu: '',
+      teminat_tutari: '',
       vade: '',
-      vadeAsimiOr: '',
-      odemeSikligi: '',
-      siparisTutariOrt12: '',
-      sipartisTutariOrt1: '',
-      iadeYuzdesi1: '',
-      iadeYuzdesi12: '',
-      ortGecikmeGunSayisi: '',
-      ortGecikmeGunBakiyesi: '',
+      vade_asimi_ortalamasi: '',
+      odeme_sikligi: '',
+      ort_siparis_tutari_12ay: '',
+      ort_siparis_tutari_1ay: '',
+      iade_yuzdesi_1: '',
+      iade_yuzdesi_12: '',
+      ort_gecikme_gun_sayisi: '',
+      ort_gecikme_gun_bakiyesi: '',
       bakiye: ''
     }
   }),
@@ -121,28 +130,21 @@ export default {
     },
   },
 
-  created() {
-    this.initialize()
+  mounted() {
+    this.getDataFromApi();
   },
 
   methods: {
-    getRiskDatasets() {
-      this.riskdatasetValues = []
 
+    async getDataFromApi() {
+      await this.getRiskDataset();
     },
 
-    setRiskDatasetColumns() {
-      var datasets = this.riskdatasetValues;
-      this.riskdatasetColumns = datasets;
-
+    async getRiskDataset() {
+      const response = await axios.get(RISKDATASET_API);
+      this.riskdatasetValues = response.data;
+      console.log(this.riskdatasetValues);
     },
-
-    initialize() {
-      // veriler çekilir
-      this.getRiskDatasets();
-      this.setRiskDatasetColumns()
-    },
-
     submit() {
       this.$refs.observer.validate()
     },

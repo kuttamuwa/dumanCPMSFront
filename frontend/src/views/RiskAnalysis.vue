@@ -1,48 +1,78 @@
 <template>
-  <div id="riskanalysis">
-    <v-alert
-        dense
-        border="left"
-        type="warning"
-    >
-      Yükleyeceğiniz verinin excel uzantısında ve sütunlarının
-      <a href="README.md">klavuzda yazdığı gibi </a> olduklarından emin olunuz
-    </v-alert>
+  <v-form v-model="valid">
+    <div id="riskanalysis">
+      <v-expansion-panels>
 
-    <v-form>
-      <v-file-input
-          chips
-          persistent-hint
-          hint="Excel verinizi yüklerken sütunların doğru olduğuna emin olunuz."
-          label="Risk Analiz verilerinizi yükleyiniz"
-      ></v-file-input>
+        <v-expansion-panel id="creationForm">
+          <v-expansion-panel-header>
+            Dataset Yükle
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
 
-      <v-btn
-          class="mr-4"
-          @click="submit"
-      >
-        Gönder
-      </v-btn>
-      <v-btn @click="clear">
-        Temizle
-      </v-btn>
-    </v-form>
+            <v-alert
+                dense
+                border="left"
+                type="warning"
+            >
+              Yükleyeceğiniz verinin excel uzantısında ve sütunlarının
+              <a href="README.md">klavuzda yazdığı gibi </a> olduklarından emin olunuz
+            </v-alert>
 
-    <v-expansion-panel id="RiskDatasets">
-      <v-expansion-panel-header>
-        Veriler
-      </v-expansion-panel-header>
-      <v-expansion-panel-content>
-        <v-data-table
-            :headers="riskdatasetColumns"
-            :items="riskdatasetValues"
-            :items-per-page="10"
-            class="elevation-1"
-        ></v-data-table>
-      </v-expansion-panel-content>
-    </v-expansion-panel>
+            <v-card>
+              <v-card-text>
+                Excel dosyası
+              </v-card-text>
+              <v-container id="excelUpload">
+                <v-file-input
+                    chips
+                    persistent-hint
+                    hint="Excel verinizi yüklerken sütunların doğru olduğuna emin olunuz."
+                    label="Risk Analiz verilerinizi yükleyiniz"
+                ></v-file-input>
 
-  </div>
+                <v-btn
+                    class="mr-4"
+                    @click="submit"
+                >
+                  Gönder
+                </v-btn>
+                <v-btn @click="clear">
+                  Temizle
+                </v-btn>
+              </v-container>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+
+        <v-divider></v-divider>
+
+        <v-expansion-panel id="Read">
+          <v-expansion-panel-header>
+            Veriler
+          </v-expansion-panel-header>
+          <v-expansion-panel-content>
+            <v-data-table
+                :headers="riskdatasetColumns"
+                :items="riskdatasetValues"
+                :items-per-page="10"
+                class="elevation-1"
+            >
+              <template v-slot:item.actions="{ item }">
+                <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(item)"
+                >
+                  mdi-pencil
+                </v-icon>
+              </template>
+            </v-data-table>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+
+      </v-expansion-panels>
+    </div>
+  </v-form>
 </template>
 
 <script>
@@ -57,6 +87,8 @@ axios.defaults.xsrfCookieName = "csrftoken";
 export default {
   name: "RiskAnalysis",
   data: () => ({
+    valid: false,
+
     excelFile: '',
     fileRules: [],
 
@@ -75,7 +107,9 @@ export default {
       {text: 'Son 12 Ay İade Yüzdesi', value: 'iade_yuzdesi_12'},
       {text: 'Ortalama Gecikme Gün Sayısı', value: 'ort_gecikme_gun_sayisi'},
       {text: 'Ortalama Gecikme Gün Bakiyesi', value: 'ort_gecikme_gun_bakiyesi'},
-      {text: 'Bakiye', value: 'bakiye'}
+      {text: 'Bakiye', value: 'bakiye'},
+      {text: 'Analiz Puanı', value: 'general_point'},
+      {text: 'Analizler', value: 'actions', sortable: false},
     ],
 
     defaultItem: {

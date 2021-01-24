@@ -9,6 +9,17 @@
           <v-expansion-panel-content>
             <v-card>
               <v-card-text>
+                Toplu veri girişi için
+              </v-card-text>
+              <v-file-input
+                  label="Faaliyet Belgesi"
+                  id="faaliyetDoc"
+              >
+
+              </v-file-input>
+            </v-card>
+            <v-card>
+              <v-card-text>
                 <v-container>
                   <v-row>
                     <v-col
@@ -96,18 +107,21 @@
                             accept="image/*"
                             label="Faaliyet Belgesi"
                             id="faaliyetDoc"
+                            v-model="faaliyetDoc"
                         ></v-file-input>
 
                         <v-file-input
                             accept="image/*"
                             label="Vergi Beyannamesi"
                             id="vergiDoc"
+                            v-model="vergiDoc"
                         ></v-file-input>
 
                         <v-file-input
                             accept="image/*"
                             label="İmza Sirküleri"
                             id="imzaDoc"
+                            v-model="imzaDoc"
                         ></v-file-input>
                       </v-container>
                     </v-col>
@@ -143,18 +157,21 @@
                             accept="image/*"
                             label="Ortaklık yapısı ve kimlik kopyaları"
                             id="partnershipDoc"
+                            v-model="partnershipDoc"
                         ></v-file-input>
 
                         <v-file-input
                             accept="image/*"
                             label="Kimlik kopyaları"
                             id="identityDoc"
+                            v-model="identityDoc"
                         ></v-file-input>
 
                         <v-file-input
                             accept="image/*"
                             label="Yönetim kurulu yapısı"
                             id="managementDoc"
+                            v-model="managementDoc"
                         ></v-file-input>
                       </v-container>
                     </v-col>
@@ -183,7 +200,7 @@
         <v-divider></v-divider>
         <v-expansion-panel id="RUD Form">
           <v-expansion-panel-header>
-            Cari Hesaplar
+            Veriler
           </v-expansion-panel-header>
           <v-expansion-panel-content>
             <v-data-table
@@ -456,10 +473,15 @@ export default {
     email_addr: 'ucok.umut@gmail.com',
 
     // documents
-    partnershipDoc: '',
-    faaliyetDoc: '',
-    vergiDoc: '',
-    imzaDoc: '',
+    // part I
+    partnershipDoc: null,
+    identityDoc: null,
+    managementDoc: null,
+
+    // part II
+    faaliyetDoc: null,
+    vergiDoc: null,
+    imzaDoc: null,
 
     generalRules: [
       v => !!v || 'Bu alan boş bırakılamaz !',
@@ -534,10 +556,15 @@ export default {
       email_addr: 'ucok.umut@gmail.com',
 
       // documents
-      // partnershipDoc: '',
-      // faaliyetDoc: '',
-      // vergiDoc: '',
-      // imzaDoc: '',
+      // part I
+      partnershipDoc: null,
+      identityDoc: null,
+      managementDoc: null,
+
+      // part II
+      faaliyetDoc: null,
+      vergiDoc: null,
+      imzaDoc: null,
     },
 
     editedIndex: -1,
@@ -584,7 +611,9 @@ export default {
     async getCities() {
       const response = await axios.get(CITY_API)
       let data = response.data;
-      this.sehirler = data.map(function (item) { return item.name })
+      this.sehirler = data.map(function (item) {
+        return item.name
+      })
       console.log("Sehirler yuklendi");
     },
 
@@ -592,14 +621,18 @@ export default {
       let cityName = this.city
       const DISTRICT_API = "http://127.0.0.1:8000/checkaccount/api/district/?city=" + cityName;
       const response = await axios.get(DISTRICT_API)
-      this.ilceler = response.data.map(function (item) {return item.name});
+      this.ilceler = response.data.map(function (item) {
+        return item.name
+      });
       console.log(cityName + "için ilçeler çekildi")
     },
 
     async getSysPersonnels() {
       const PERSONNEL_API = "http://127.0.0.1:8000/checkaccount/api/syspersonnels/?format=json"
       const response = await axios.get(PERSONNEL_API);
-      this.syspersonnels = response.data.map(function (item) {return item.username})
+      this.syspersonnels = response.data.map(function (item) {
+        return item.username
+      })
       console.log("Personel listesi yüklendi");
     },
 
@@ -650,25 +683,41 @@ export default {
     },
 
     async save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.accountValues[this.editedIndex], this.editedItem)
-      } else {
-        this.accountValues.push(this.editedItem)
-      }
+      // const files = [this.partnershipDoc, this.faaliyetDoc, this.vergiDoc,
+      //   this.imzaDoc, this.managementDoc, this.identityDoc];
 
-      console.log(this.defaultItem);
+      let formData = new FormData();
+      formData.append("partnership_structure_identity_copies", this.partnershipDoc);
+      formData.append("activity_certificate_pdf", this.faaliyetDoc);
+      formData.append("tax_return_pdf", this.vergiDoc);
 
-      // file uploading
-      const files = this.file;
-      console.log(files);
+      formData.append("authorized_signatures_list_pdf", this.imzaDoc);
+      formData.append("board_management", this.managementDoc);
+      formData.append("identity_copies", this.identityDoc);
 
-      const response2 = await axios({
-        method: 'post',
-        url: ACCOUNT_API,
-        data: this.defaultItem
-      })
-      console.log(response2);
-      this.close()
+      formData.append('Firma Adı', this.defaultItem.firm_full_name)
+      formData.append('Firma Tipi', this.defaultItem.firm_type)
+      formData.append('Kimlik No', this.defaultItem.taxpayer_number)
+      formData.append('Doğum Yeri', this.defaultItem.birthplace)
+      formData.append('Vergi Departmanı', this.defaultItem.tax_department)
+      formData.append('Firma Adresi', this.defaultItem.firm_address)
+      formData.append('Firma İletişim', this.defaultItem.firm_key_contact_personnel)
+      formData.append('Sektör', this.defaultItem.sector)
+      formData.append('Şehir', this.defaultItem.city)
+      formData.append('İlçe', this.defaultItem.district)
+      formData.append('Tel', this.defaultItem.phone_number)
+      formData.append('Fax', this.defaultItem.fax)
+      formData.append('Web', this.defaultItem.web_url)
+      formData.append('Email', this.defaultItem.email_addr)
+      const response = axios.post(ACCOUNT_API, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+      console.log(response);
+
+      await this.getDataFromApi();
+
     },
   },
 }

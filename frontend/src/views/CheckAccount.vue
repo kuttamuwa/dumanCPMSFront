@@ -709,14 +709,12 @@ export default {
       formData.append('Fax', this.defaultItem.fax)
       formData.append('Web', this.defaultItem.web_url)
       formData.append('Email', this.defaultItem.email_addr)
-      const response = axios.post(ACCOUNT_API, formData, {
+      const response = await axios.post(ACCOUNT_API, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       });
       console.log(response);
-
-      await this.getDataFromApi();
 
     },
   },

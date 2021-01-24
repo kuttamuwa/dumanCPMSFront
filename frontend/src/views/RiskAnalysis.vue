@@ -1,6 +1,19 @@
 <template>
   <v-form v-model="valid">
     <div id="riskanalysis">
+      <v-alert
+          v-bind:value="alert_status"
+
+          color="#C51162"
+          dark
+          icon="mdi-material-design"
+          border="right"
+          dismissible
+
+          v-bind:text="alert_text"
+      >
+      </v-alert>
+
       <v-expansion-panels>
 
         <v-expansion-panel id="creationForm">
@@ -28,11 +41,13 @@
                     persistent-hint
                     hint="Excel verinizi yüklerken sütunların doğru olduğuna emin olunuz."
                     label="Risk Analiz verilerinizi yükleyiniz"
+                    v-model="excelFile"
+
                 ></v-file-input>
 
                 <v-btn
                     class="mr-4"
-                    @click="submit"
+                    @click="save"
                 >
                   Gönder
                 </v-btn>
@@ -88,7 +103,12 @@ export default {
   data: () => ({
     valid: false,
 
-    excelFile: '',
+    // alert conditions
+    alert_text: "",
+    alert_status: false,
+    alert_type: "alert",
+
+    excelFile: null,
     fileRules: [],
 
     riskdatasetColumns: [
@@ -178,12 +198,9 @@ export default {
       this.riskdatasetValues = response.data;
       console.log(this.riskdatasetValues);
     },
-    submit() {
-      this.$refs.observer.validate()
-    },
 
     clear() {
-      this.excelFile = ''
+      this.excelFile = null
       this.$refs.observer.reset()
     },
 
@@ -200,13 +217,30 @@ export default {
       this.riskdatasetValues[index].general_point = point
     },
 
-    save() {
-      if (this.editedIndex > -1) {
-        Object.assign(this.riskdatasetValues[this.editedIndex], this.editedItem)
-      } else {
-        this.riskdatasetValues.push(this.editedItem)
-      }
-      this.close()
+    async save() {
+      let formData = new FormData();
+      formData.append("excel", this.excelFile);
+
+      const response = await axios.post(RISKDATASET_API, formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data'
+            }
+          }).then(
+          (response => {
+            if (response.status !== 200) {
+              console.log("YÜKLEME BAŞARISIZ :/")
+              this.alert_type = "alert";
+              this.alert_text = response.data
+            } else {
+              console.log("YÜKLEME BAŞARILI")
+              this.alert_text = "Veriler yüklendi"
+              this.alert_type = "succeed";
+            }
+            this.alert_status = true;
+          })
+      );
+      console.log("veri yollandi cevabi " + response);
     },
 
   },

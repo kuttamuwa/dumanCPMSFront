@@ -7,17 +7,17 @@
             Cari Hesap Aç
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-card>
-              <v-card-text>
-                Toplu veri girişi için
-              </v-card-text>
-              <v-file-input
-                  label="Faaliyet Belgesi"
-                  id="faaliyetDoc"
-              >
+<!--            <v-card>-->
+<!--              <v-card-text>-->
+<!--                Toplu veri girişi için-->
+<!--              </v-card-text>-->
+<!--              <v-file-input-->
+<!--                  label="Faaliyet Belgesi"-->
+<!--                  id="faaliyetDoc"-->
+<!--              >-->
 
-              </v-file-input>
-            </v-card>
+<!--              </v-file-input>-->
+<!--            </v-card>-->
             <v-card>
               <v-card-text>
                 <v-container>

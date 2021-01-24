@@ -71,10 +71,10 @@ export default {
           {title: 'Cari Hesap', icon: 'mdi-account-cash', to: '/checkaccount'},
           {title: 'Risk Analiz', icon: 'mdi-database-edit', to: '/riskanalysis'},
           {title: 'About', icon: 'mdi-help-box', to: '/about'},
-          {title: 'Admin & Config', icon: 'mdi-cog-outline', to: '/appconfig'},
+          {title: 'Dashboard', icon: 'mdi-view-dashboard', to:'/dashboard'},
 
-          {title: "Tests", icon: "mdi-test", to:'/tests'},
-          {title: "Crud Test", icon: "mdi-test", to:'/PastCheckAccount'}
+          {title: 'Test', icon: 'mdi-test', to:'/test'}
+
         ],
       }),
 }

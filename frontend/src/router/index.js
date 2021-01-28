@@ -3,9 +3,7 @@ import VueRouter from 'vue-router'
 import lstore from "@/store/lstore";
 // site views
 import Home from '../views/Home.vue'
-import Login from "@/views/Login";
-import Logout from "@/views/Logout";
-
+import axios from "axios";
 // modules
 
 
@@ -22,7 +20,9 @@ const requireAuth = (to, from, next) => {
 }
 
 const checkPermission = () => {
-
+    const PERM_API = "http://127.0.0.1:8000/appconfig/getperms/"
+    const response = axios.get(PERM_API)
+    console.log(response)
 }
 
 const routes = [
@@ -67,13 +67,13 @@ const routes = [
     {
         path: "/login",
         name: "Login",
-        component: Login,
+        component: () => import('../views/Login'),
     },
 
     {
-        path:"/logout",
+        path: "/logout",
         name: "Logout",
-        component: Logout
+        component: () => import('../views/Logout')
     }
 ]
 

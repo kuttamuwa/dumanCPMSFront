@@ -9,6 +9,22 @@
 
       <v-img src="DUMANARGE.jpg"></v-img>
 
+      <v-list-item class="px-2">
+        <v-list-item-avatar>
+          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+        </v-list-item-avatar>
+
+        <v-list-item-title>John Leider</v-list-item-title>
+
+        <v-btn
+            icon
+            @click.stop="mini = !mini"
+        >
+          <v-icon>mdi-chess-rook</v-icon>
+        </v-btn>
+      </v-list-item>
+
+      <v-divider></v-divider>
       <v-divider></v-divider>
 
       <v-list
@@ -53,6 +69,14 @@
       <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
       <v-app-bar-title>360 Müşteri Performans Yönetim Platformu</v-app-bar-title>
+      <v-spacer></v-spacer>
+
+      <v-btn
+          to="/login"
+      @click="checkPermission">
+        <v-icon>mdi-login</v-icon>
+      </v-btn>
+
     </v-app-bar>
 
     <v-main>
@@ -64,6 +88,7 @@
 
 <script>
 import MsgComponent from "@/components/msgComponent";
+import axios from "axios";
 export default {
   components: {MsgComponent},
   data: () => (
@@ -77,9 +102,15 @@ export default {
           {title: 'Dashboard', icon: 'mdi-view-dashboard', to: '/dashboard'},
 
           {title: 'Test', icon: 'mdi-test', to: '/test'},
-          {title: 'Login', icon: 'mdi-login', to: '/login'},
-          {title: 'Logout', icon: 'mdi-logout', to: '/logout'}
         ],
       }),
+
+  methods: {
+    checkPermission() {
+      const PERM_API = "http://127.0.0.1:8000/appconfig/getperms/"
+      const response = axios.get(PERM_API)
+      console.log(response)
+    }
+  }
 }
 </script>

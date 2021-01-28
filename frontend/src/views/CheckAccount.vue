@@ -7,17 +7,17 @@
             Cari Hesap Aç
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-<!--            <v-card>-->
-<!--              <v-card-text>-->
-<!--                Toplu veri girişi için-->
-<!--              </v-card-text>-->
-<!--              <v-file-input-->
-<!--                  label="Faaliyet Belgesi"-->
-<!--                  id="faaliyetDoc"-->
-<!--              >-->
+            <!--            <v-card>-->
+            <!--              <v-card-text>-->
+            <!--                Toplu veri girişi için-->
+            <!--              </v-card-text>-->
+            <!--              <v-file-input-->
+            <!--                  label="Faaliyet Belgesi"-->
+            <!--                  id="faaliyetDoc"-->
+            <!--              >-->
 
-<!--              </v-file-input>-->
-<!--            </v-card>-->
+            <!--              </v-file-input>-->
+            <!--            </v-card>-->
             <v-card>
               <v-card-text>
                 <v-container>
@@ -441,6 +441,8 @@
 </template>
 
 <script>
+import lstore from "@/store/lstore";
+
 const ACCOUNT_API = "http://127.0.0.1:8000/checkaccount/api/accounts/?format=json";
 const CITY_API = "http://127.0.0.1:8000/checkaccount/api/cities/?format=json";
 
@@ -656,7 +658,7 @@ export default {
     },
 
     deleteItemConfirm() {
-      this.desserts.splice(this.editedIndex, 1)
+      this.accountValues.splice(this.editedIndex, 1)
       this.closeDelete()
     },
 
@@ -709,13 +711,23 @@ export default {
       formData.append('Fax', this.defaultItem.fax)
       formData.append('Web', this.defaultItem.web_url)
       formData.append('Email', this.defaultItem.email_addr)
+
       const response = await axios.post(ACCOUNT_API, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
-      });
-      console.log(response);
-
+      }).then(
+          (response => {
+            if (response.status !== 201) {
+              lstore.commit('showmsg', {text: "Cari hesap oluşturulamadı", show: true})
+              console.log(response)
+            } else {
+              console.log("Hesap oluşturuldu !");
+              lstore.commit('showmsg', {text: "Cari Hesap oluşturuldu: " + response.data.firm_full_name
+                , show: true});
+            }
+          })
+      )
     },
   },
 }

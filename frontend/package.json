@@ -9,6 +9,7 @@
   "dependencies": {
     "@tmigone/vuetify-easy-crud": "^1.6.0",
     "axios": "^0.21.1",
+    "bootstrap": "^4.6.0",
     "core-js": "^3.6.5",
     "js-cookie": "^2.2.1",
     "vue": "^2.6.11",
@@ -19,6 +20,7 @@
     "@vue/cli-plugin-babel": "~4.5.0",
     "@vue/cli-plugin-router": "~4.5.0",
     "@vue/cli-service": "~4.5.0",
+    "jsonwebtoken": "^8.5.1",
     "sass": "^1.19.0",
     "sass-loader": "^8.0.0",
     "vue-cli-plugin-vuetify": "^2.0.9",

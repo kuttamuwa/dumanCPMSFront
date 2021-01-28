@@ -56,13 +56,16 @@
     </v-app-bar>
 
     <v-main>
+      <msg-component/>
       <router-view></router-view>
     </v-main>
   </v-app>
 </template>
 
 <script>
+import MsgComponent from "@/components/msgComponent";
 export default {
+  components: {MsgComponent},
   data: () => (
       {
         drawer: null,
@@ -71,10 +74,11 @@ export default {
           {title: 'Cari Hesap', icon: 'mdi-account-cash', to: '/checkaccount'},
           {title: 'Risk Analiz', icon: 'mdi-database-edit', to: '/riskanalysis'},
           {title: 'About', icon: 'mdi-help-box', to: '/about'},
-          {title: 'Dashboard', icon: 'mdi-view-dashboard', to:'/dashboard'},
+          {title: 'Dashboard', icon: 'mdi-view-dashboard', to: '/dashboard'},
 
-          {title: 'Test', icon: 'mdi-test', to:'/test'}
-
+          {title: 'Test', icon: 'mdi-test', to: '/test'},
+          {title: 'Login', icon: 'mdi-login', to: '/login'},
+          {title: 'Logout', icon: 'mdi-logout', to: '/logout'}
         ],
       }),
 }

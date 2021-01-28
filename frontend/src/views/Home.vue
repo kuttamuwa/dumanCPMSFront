@@ -1,8 +1,12 @@
 <template>
   <div class="home">
 
-    <a href="/login" style="color: #5e9ca0;">360 Müşteri Performans Yönetim Sistemi'ne Hoş Geldiniz. <br>
-      Giriş yaptıktan sonra yetkinize uygun olarak sol panelde modülleri görebilirsiniz.</a>
+    <v-btn
+        to="/login">
+      <v-icon>mdi-logout</v-icon>
+      360 Müşteri Performans Yönetim Sistemi'ne Hoş Geldiniz. <br>
+      Giriş yaptıktan sonra yetkinize uygun olarak sol panelde modülleri görebilirsiniz.
+    </v-btn>
     <h2 style="color: #2e6c80;">Modüller:</h2>
 
     <ol style="list-style: none; font-size: 14px; line-height: 32px; font-weight: bold;">

@@ -91,7 +91,6 @@
                           label="Şehir"
                           v-model="city"
                           :items="sehirler"
-                          @click="getDistrict"
                       ></v-combobox>
 
                       <v-combobox
@@ -99,6 +98,7 @@
                           label="İlçe"
                           v-model="district"
                           :items="ilceler"
+                          @click="getDistrict"
                       ></v-combobox>
                       <br>
 
@@ -729,6 +729,14 @@ export default {
           })
       )
     },
+    testPerm() {
+      try {
+        this.getDataFromApi()
+        return true;
+      } catch (e) {
+        return false;
+      }
+    }
   },
 }
 </script>

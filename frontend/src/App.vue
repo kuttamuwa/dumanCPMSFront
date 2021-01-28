@@ -70,11 +70,9 @@
 
       <v-app-bar-title>360 Müşteri Performans Yönetim Platformu</v-app-bar-title>
       <v-spacer></v-spacer>
-
       <v-btn
-          to="/login"
-      @click="checkPermission">
-        <v-icon>mdi-login</v-icon>
+          to="/logout">
+        <v-icon>mdi-logout</v-icon>
       </v-btn>
 
     </v-app-bar>
@@ -110,20 +108,21 @@ export default {
       }),
 
   methods: {
-    checkPermission() {
-      const PERM_API = "http://127.0.0.1:8000/appconfig/getperms/"
-      const response = axios.get(PERM_API)
-      console.log(response)
+    getAvatar() {
+      const AVATAR_API = ""
+      const response = axios.get()
+    },
+
+    testPermissions() {
+      for (const key in this.items) {
+        
+      }
     }
   },
 
-  getAvatar() {
-    const AVATAR_API = ""
-    const response = axios.get()
-  },
 
   mounted() {
-    this.kullanici = lstore.state.user
+    this.kullanici = localStorage.getItem("user")
   }
 }
 </script>

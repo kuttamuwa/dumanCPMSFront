@@ -89,10 +89,14 @@
 <script>
 import MsgComponent from "@/components/msgComponent";
 import axios from "axios";
+import lstore from "@/store/lstore";
 export default {
   components: {MsgComponent},
   data: () => (
       {
+        kullanici: '',
+        kullanici_img: '',
+
         drawer: null,
         items: [
           {title: 'Ana Sayfa', icon: 'mdi-home', to: '/'},
@@ -111,6 +115,15 @@ export default {
       const response = axios.get(PERM_API)
       console.log(response)
     }
+  },
+
+  getAvatar() {
+    const AVATAR_API = ""
+    const response = axios.get()
+  },
+
+  mounted() {
+    this.kullanici = lstore.state.user
   }
 }
 </script>

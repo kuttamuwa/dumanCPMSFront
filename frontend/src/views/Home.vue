@@ -13,7 +13,7 @@
                                     width="45"/> Risk Analizi
       </li>
       <li style="clear: both;"><img style="float: left;" src="https://html-online.com/img/04-replace.png"
-                                    awidth="45"/> Dashboard
+                                    width="45"/> Dashboard
       </li>
     </ol>
   </div>

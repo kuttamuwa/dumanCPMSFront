@@ -14,7 +14,8 @@
           <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title>John Leider</v-list-item-title>
+        <v-list-item-title
+        v-text="kullanici"></v-list-item-title>
 
         <v-btn
             icon
@@ -71,7 +72,8 @@
       <v-app-bar-title>360 Müşteri Performans Yönetim Platformu</v-app-bar-title>
       <v-spacer></v-spacer>
       <v-btn
-          to="/logout">
+          to="/logout"
+      @click="clearUser">
         <v-icon>mdi-logout</v-icon>
       </v-btn>
 
@@ -108,21 +110,26 @@ export default {
       }),
 
   methods: {
-    getAvatar() {
+    setAvatar() {
       const AVATAR_API = ""
       const response = axios.get()
     },
 
+    clearUser() {
+      this.kullanici = ""
+    },
+
     testPermissions() {
       for (const key in this.items) {
-        
+
       }
     }
   },
 
 
   mounted() {
-    this.kullanici = localStorage.getItem("user")
+    this.kullanici = localStorage.getItem("user");
+    // this.setAvatar();
   }
 }
 </script>

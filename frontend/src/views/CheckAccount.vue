@@ -1,442 +1,374 @@
 <template>
   <v-form v-model="valid">
-    <div id="checkAccountCRUD">
-      <v-expansion-panels>
-        <v-expansion-panel id="creationForm">
-          <v-expansion-panel-header>
-            Cari Hesap Aç
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <!--            <v-card>-->
-            <!--              <v-card-text>-->
-            <!--                Toplu veri girişi için-->
-            <!--              </v-card-text>-->
-            <!--              <v-file-input-->
-            <!--                  label="Faaliyet Belgesi"-->
-            <!--                  id="faaliyetDoc"-->
-            <!--              >-->
-
-            <!--              </v-file-input>-->
-            <!--            </v-card>-->
-            <v-card>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col
-                        cols="12"
-                        md="4"
-                    >
-                      <v-card-text> Ticari Bilgiler</v-card-text>
-                      <v-combobox
-                          label="Firma Tipi"
-                          persistent-hint
-                          v-model="firm_type"
-                          :items="firmTypes"
-                      ></v-combobox>
-
-                      <v-text-field
-                          label="Firma Adı"
-                          v-model="firm_full_name"
-                          required
-                      ></v-text-field>
-
-                      <v-text-field
-                          label="Kimlik No"
-                          v-model="taxpayer_number"
-                          :rules="kimlikRules"
-                          required
-                      ></v-text-field>
-
-                      <v-text-field
-                          label="Vergi Departmanı"
-                          v-model="tax_department"
-                          :rules="generalRules"
-                          required
-                      ></v-text-field>
-
-                      <v-text-field
-                          label="Firma Adresi"
-                          v-model="firm_address"
-                          :rules="generalRules"
-                          required
-                      ></v-text-field>
-
-                      <v-combobox
-                          label="Doğum Yeri"
-                          persistent-hint
-                          v-model="birthplace"
-                          :items="sehirler"
-                      ></v-combobox>
-
-                      <v-combobox
-                          persistent-hint
-                          label="İletişim Personeli"
-                          v-model="firm_key_contact_personnel"
-                          :items="syspersonnels"
-                      ></v-combobox>
-
-                    </v-col>
-
-                    <v-col>
-                      <v-card-text>Firma Bilgileri</v-card-text>
-                      <v-text-field
-                          v-model="sector"
-                          :rules="generalRules"
-                          label="Sektör"
-                          required
-                      ></v-text-field>
-
-                      <v-combobox
-                          persistent-hint
-                          label="Şehir"
-                          v-model="city"
-                          :items="sehirler"
-                      ></v-combobox>
-
-                      <v-combobox
-                          persistent-hint
-                          label="İlçe"
-                          v-model="district"
-                          :items="ilceler"
-                          @click="getDistrict"
-                      ></v-combobox>
-                      <br>
-
-                      <v-container id="attachmentsTicaret">
-                        <v-file-input
-                            accept="image/*"
-                            label="Faaliyet Belgesi"
-                            id="faaliyetDoc"
-                            v-model="faaliyetDoc"
-                        ></v-file-input>
-
-                        <v-file-input
-                            accept="image/*"
-                            label="Vergi Beyannamesi"
-                            id="vergiDoc"
-                            v-model="vergiDoc"
-                        ></v-file-input>
-
-                        <v-file-input
-                            accept="image/*"
-                            label="İmza Sirküleri"
-                            id="imzaDoc"
-                            v-model="imzaDoc"
-                        ></v-file-input>
-                      </v-container>
-                    </v-col>
-
-                    <!--        İletişim bilgileri-->
-                    <v-col
-                        cols="12"
-                        md="4"
-                    >
-                      <v-card-text>İletişim Bilgileri</v-card-text>
-                      <v-text-field
-                          v-model="email_addr"
-                          :rules="emailRules"
-                          label="E-mail"
-                          required
-                      ></v-text-field>
-
-                      <v-text-field
-                          v-model="phone_number"
-                          :rules="telnoRules"
-                          label="Telefon"
-                          required
-                      ></v-text-field>
-
-                      <v-text-field
-                          v-model="fax"
-                          label="Fax"
-                          required
-                      ></v-text-field>
-
-                      <v-container id="attachmentsPartnership">
-                        <v-file-input
-                            accept="image/*"
-                            label="Ortaklık yapısı ve kimlik kopyaları"
-                            id="partnershipDoc"
-                            v-model="partnershipDoc"
-                        ></v-file-input>
-
-                        <v-file-input
-                            accept="image/*"
-                            label="Kimlik kopyaları"
-                            id="identityDoc"
-                            v-model="identityDoc"
-                        ></v-file-input>
-
-                        <v-file-input
-                            accept="image/*"
-                            label="Yönetim kurulu yapısı"
-                            id="managementDoc"
-                            v-model="managementDoc"
-                        ></v-file-input>
-                      </v-container>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-
-              <v-card-actions>
-                <v-spacer></v-spacer>
-                <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="close"
-                >
-                  Temizle
-                </v-btn>
-                <v-btn
-                    color="blue darken-1"
-                    text
-                    @click="submitData"> Kaydet
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-        <v-divider></v-divider>
-        <v-expansion-panel id="RUD Form">
-          <v-expansion-panel-header>
-            Veriler
-          </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-data-table
-                :headers="accountColumns"
-                :items="accountValues"
-                sort-by="firmaAdi"
-                class="elevation-1"
-            >
-              <template v-slot:top>
-                <v-toolbar
-                    flat>
-                  <v-toolbar-title>Cari Hesap Aç</v-toolbar-title>
-                  <v-divider
-                      class="mx-4"
-                      inset
-                      vertical
-                  ></v-divider>
-                  <v-spacer></v-spacer>
-                  <v-dialog
-                      v-model="dialog"
-                      max-width="500px"
+    <v-expansion-panels>
+      <v-expansion-panel id="creationForm">
+        <v-expansion-panel-header>
+          Cari Hesap Aç
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-card>
+            <v-card-text>
+              <v-container>
+                <v-row>
+                  <v-col
+                      cols="12"
+                      md="4"
                   >
-                    <v-card>
-                      <v-card-title>
-                        <span class="headline">Cari Hesap</span>
-                      </v-card-title>
+                    <v-card-text> Ticari Bilgiler</v-card-text>
+                    <v-combobox
+                        label="Firma Tipi"
+                        persistent-hint
+                        v-model="firm_type"
+                        :items="firmTypes"
+                    ></v-combobox>
 
-                      <v-card-text>
-                        <v-container>
-                          <v-row>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                              <v-text-field
-                                  v-model="editedItem.firmaTipi"
-                                  label="Firma Tipi"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                              <v-text-field
-                                  v-model="editedItem.firmaAdi"
-                                  label="Firma Adı"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                              <v-text-field
-                                  v-model="editedItem.kimlikNo"
-                                  label="Kimlik No"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                              <v-text-field
-                                  v-model="editedItem.dyeri"
-                                  label="Doğum Yeri"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                              <v-text-field
-                                  v-model="editedItem.vdepartmani"
-                                  label="Vergi Departmanı"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                              <v-text-field
-                                  v-model="editedItem.firmaddr"
-                                  label="Firma Adresi"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                              <v-text-field
-                                  v-model="editedItem.firmcontact"
-                                  label="Firma Contact"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                              <v-text-field
-                                  v-model="editedItem.sektor"
-                                  label="Sektör"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                              <v-text-field
-                                  v-model="editedItem.sehir"
-                                  label="Şehir"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                              <v-text-field
-                                  v-model="editedItem.ilce"
-                                  label="İlçe"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                              <v-text-field
-                                  v-model="editedItem.telno"
-                                  label="Tel No"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                              <v-text-field
-                                  v-model="editedItem.fax"
-                                  label="Fax"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                              <v-text-field
-                                  v-model="editedItem.web_url"
-                                  label="Vergi Departmanı"
-                              ></v-text-field>
-                            </v-col>
-                            <v-col
-                                cols="12"
-                                sm="6"
-                                md="4"
-                            >
-                              <v-text-field
-                                  v-model="editedItem.email_addr"
-                                  label="Email"
-                              ></v-text-field>
-                            </v-col>
-                          </v-row>
-                        </v-container>
-                      </v-card-text>
+                    <v-text-field
+                        label="Firma Adı"
+                        v-model="firm_full_name"
+                        required
+                    ></v-text-field>
 
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="close"
-                        >
-                          İptal
-                        </v-btn>
-                        <v-btn
-                            color="blue darken-1"
-                            text
-                            @click="save"
-                        >
-                          Kaydet
-                        </v-btn>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
-                  <v-dialog v-model="dialogDelete" max-width="500px">
-                    <v-card>
-                      <v-card-title class="headline">Bu kaydı silmek istiyor musunuz?</v-card-title>
-                      <v-card-actions>
-                        <v-spacer></v-spacer>
-                        <v-btn color="blue darken-1" text @click="closeDelete">İptal</v-btn>
-                        <v-btn color="blue darken-1" text @click="deleteItemConfirm">Tamam</v-btn>
-                        <v-spacer></v-spacer>
-                      </v-card-actions>
-                    </v-card>
-                  </v-dialog>
-                </v-toolbar>
-              </template>
+                    <v-text-field
+                        label="Kimlik No"
+                        v-model="taxpayer_number"
+                        :rules="kimlikRules"
+                        required
+                    ></v-text-field>
 
-              <template v-slot:item.actions="{ item }">
-                <v-icon
-                    small
-                    class="mr-2"
-                    @click="editItem(item)"
+                    <v-text-field
+                        label="Vergi Departmanı"
+                        v-model="tax_department"
+                        :rules="generalRules"
+                        required
+                    ></v-text-field>
+
+                    <v-text-field
+                        label="Firma Adresi"
+                        v-model="firm_address"
+                        :rules="generalRules"
+                        required
+                    ></v-text-field>
+
+                    <v-combobox
+                        label="Doğum Yeri"
+                        persistent-hint
+                        v-model="birthplace"
+                        :items="sehirler"
+                    ></v-combobox>
+
+                    <v-combobox
+                        persistent-hint
+                        label="İletişim Personeli"
+                        v-model="firm_key_contact_personnel"
+                        :items="syspersonnels"
+                    ></v-combobox>
+
+                  </v-col>
+
+                  <v-col>
+                    <v-card-text>Firma Bilgileri</v-card-text>
+                    <v-text-field
+                        v-model="sector"
+                        :rules="generalRules"
+                        label="Sektör"
+                        required
+                    ></v-text-field>
+
+                    <v-combobox
+                        persistent-hint
+                        label="Şehir"
+                        v-model="city"
+                        :items="sehirler"
+                    ></v-combobox>
+
+                    <v-combobox
+                        persistent-hint
+                        label="İlçe"
+                        v-model="district"
+                        :items="ilceler"
+                        @click="getDistrict"
+                    ></v-combobox>
+                    <br>
+
+                    <v-container id="attachmentsTicaret">
+                      <v-file-input
+                          accept="image/*"
+                          label="Faaliyet Belgesi"
+                          id="faaliyetDoc"
+                          v-model="faaliyetDoc"
+                      ></v-file-input>
+
+                      <v-file-input
+                          accept="image/*"
+                          label="Vergi Beyannamesi"
+                          id="vergiDoc"
+                          v-model="vergiDoc"
+                      ></v-file-input>
+
+                      <v-file-input
+                          accept="image/*"
+                          label="İmza Sirküleri"
+                          id="imzaDoc"
+                          v-model="imzaDoc"
+                      ></v-file-input>
+                    </v-container>
+                  </v-col>
+
+                  <!--        İletişim bilgileri-->
+                  <v-col
+                      cols="12"
+                      md="4"
+                  >
+                    <v-card-text>İletişim Bilgileri</v-card-text>
+                    <v-text-field
+                        v-model="email_addr"
+                        :rules="emailRules"
+                        label="E-mail"
+                        required
+                    ></v-text-field>
+
+                    <v-text-field
+                        v-model="phone_number"
+                        :rules="telnoRules"
+                        label="Telefon"
+                        required
+                    ></v-text-field>
+
+                    <v-text-field
+                        v-model="fax"
+                        label="Fax"
+                        required
+                    ></v-text-field>
+
+                    <v-container id="attachmentsPartnership">
+                      <v-file-input
+                          accept="image/*"
+                          label="Ortaklık yapısı ve kimlik kopyaları"
+                          id="partnershipDoc"
+                          v-model="partnershipDoc"
+                      ></v-file-input>
+
+                      <v-file-input
+                          accept="image/*"
+                          label="Kimlik kopyaları"
+                          id="identityDoc"
+                          v-model="identityDoc"
+                      ></v-file-input>
+
+                      <v-file-input
+                          accept="image/*"
+                          label="Yönetim kurulu yapısı"
+                          id="managementDoc"
+                          v-model="managementDoc"
+                      ></v-file-input>
+                    </v-container>
+                  </v-col>
+                </v-row>
+              </v-container>
+            </v-card-text>
+
+            <v-card-actions>
+              <v-spacer></v-spacer>
+              <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="close"
+              >
+                Temizle
+              </v-btn>
+              <v-btn
+                  color="blue darken-1"
+                  text
+                  @click="submitData"> Kaydet
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+
+      <v-divider></v-divider>
+
+      <v-expansion-panel id="RUD Form">
+        <v-expansion-panel-header>
+          Veriler
+        </v-expansion-panel-header>
+        <v-expansion-panel-content>
+          <v-data-table
+              :headers="accountColumns"
+              :items="accountValues"
+              sort-by="firmaAdi"
+              class="elevation-1"
+          >
+            <template v-slot:top>
+                <v-divider
+                ></v-divider>
+                <v-spacer></v-spacer>
+                <v-dialog
+                    v-model="dialog"
+                    max-width="500px"
                 >
-                  mdi-pencil
-                </v-icon>
-                <v-icon
-                    small
-                    @click="deleteItem(item)"
-                >
-                  mdi-delete
-                </v-icon>
-              </template>
+                  <v-card>
+                    <v-card-title>
+                      <span class="headline">Cari Hesap</span>
+                    </v-card-title>
 
-              <template v-slot:no-data>
-                <v-btn
-                    color="primary"
-                    @click="initialize"
-                >
-                  Reset
-                </v-btn>
-              </template>
-            </v-data-table>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
-    </div>
+                    <v-card-text>
+                      <v-container>
+                        <v-row>
+<!--                          <v-col>-->
+                            <v-text-field
+                                v-model="editedItem.firm_type"
+                                label="Firma Tipi"
+                            ></v-text-field>
+<!--                          </v-col>-->
+<!--                          <v-col>-->
+                            <v-text-field
+                                v-model="editedItem.firm_full_name"
+                                label="Firma Adı"
+                            ></v-text-field>
+<!--                          </v-col>-->
+<!--                          <v-col>-->
+                            <v-text-field
+                                v-model="editedItem.taxpayer_number"
+                                label="Kimlik No"
+                            ></v-text-field>
+<!--                          </v-col>-->
+<!--                          <v-col>-->
+                            <v-text-field
+                                v-model="editedItem.birthplace"
+                                label="Doğum Yeri"
+                            ></v-text-field>
+<!--                          </v-col>-->
+<!--                          <v-col>-->
+                            <v-text-field
+                                v-model="editedItem.vdepartmani"
+                                label="Vergi Departmanı"
+                            ></v-text-field>
+<!--                          </v-col>-->
+<!--                          <v-col>-->
+                            <v-text-field
+                                v-model="editedItem.firmaddr"
+                                label="Firma Adresi"
+                            ></v-text-field>
+<!--                          </v-col>-->
+<!--                          <v-col>-->
+                            <v-text-field
+                                v-model="editedItem.firmcontact"
+                                label="Firma Contact"
+                            ></v-text-field>
+<!--                          </v-col>-->
+<!--                          <v-col>-->
+                            <v-text-field
+                                v-model="editedItem.sector"
+                                label="Sektör"
+                            ></v-text-field>
+<!--                          </v-col>-->
+<!--                          <v-col-->
+<!--                          >-->
+                            <v-text-field
+                                v-model="editedItem.city"
+                                label="Şehir"
+                            ></v-text-field>
+<!--                          </v-col>-->
+<!--                          <v-col-->
+<!--                          >-->
+                            <v-text-field
+                                v-model="editedItem.district"
+                                label="İlçe"
+                            ></v-text-field>
+<!--                          </v-col>-->
+<!--                          <v-col-->
+<!--                          >-->
+                            <v-text-field
+                                v-model="editedItem.phone_number"
+                                label="Tel No"
+                            ></v-text-field>
+<!--                          </v-col>-->
+<!--                          <v-col-->
+<!--                          >-->
+                            <v-text-field
+                                v-model="editedItem.fax"
+                                label="Fax"
+                            ></v-text-field>
+<!--                          </v-col>-->
+<!--                          <v-col-->
+<!--                          >-->
+                            <v-text-field
+                                v-model="editedItem.web_url"
+                                label="Vergi Departmanı"
+                            ></v-text-field>
+<!--                          </v-col>-->
+<!--                          <v-col-->
+<!--                          >-->
+                            <v-text-field
+                                v-model="editedItem.email_addr"
+                                label="Email"
+                            ></v-text-field>
+<!--                          </v-col>-->
+                        </v-row>
+                      </v-container>
+                    </v-card-text>
+
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="close"
+                      >
+                        İptal
+                      </v-btn>
+                      <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="save"
+                      >
+                        Kaydet
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+                <v-dialog v-model="dialogDelete" max-width="500px">
+                  <v-card>
+                    <v-card-title class="headline">Bu kaydı silmek istiyor musunuz?</v-card-title>
+                    <v-card-actions>
+                      <v-spacer></v-spacer>
+                      <v-btn color="blue darken-1" text @click="closeDelete">İptal</v-btn>
+                      <v-btn color="blue darken-1" text @click="deleteItemConfirm">Tamam</v-btn>
+                      <v-spacer></v-spacer>
+                    </v-card-actions>
+                  </v-card>
+                </v-dialog>
+            </template>
+
+            <template v-slot:item.actions="{ item }">
+              <v-icon
+                  small
+                  class="mr-2"
+                  @click="editItem(item)"
+              >
+                mdi-pencil
+              </v-icon>
+              <v-icon
+                  small
+                  @click="deleteItem(item)"
+              >
+                mdi-delete
+              </v-icon>
+            </template>
+
+            <template v-slot:no-data>
+              <v-btn
+                  color="primary"
+                  @click="initialize"
+              >
+                Reset
+              </v-btn>
+            </template>
+          </v-data-table>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+    </v-expansion-panels>
   </v-form>
 </template>
 
@@ -599,8 +531,8 @@ export default {
   },
 
   mounted() {
+    axios.defaults.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('token');
     this.getDataFromApi();
-
   },
 
   methods: {
@@ -679,9 +611,10 @@ export default {
     },
 
     async submitData() {
-      console.log(this.defaultItem);
+      console.log(this.editedItem);
       await this.save();
 
+      this.accountValues.push(this.editedItem);
     },
 
     async save() {
@@ -723,20 +656,14 @@ export default {
               console.log(response)
             } else {
               console.log("Hesap oluşturuldu !");
-              lstore.commit('showmsg', {text: "Cari Hesap oluşturuldu: " + response.data.firm_full_name
-                , show: true});
+              lstore.commit('showmsg', {
+                text: "Cari Hesap oluşturuldu: " + response.data.firm_full_name
+                , show: true
+              });
             }
           })
       )
     },
-    testPerm() {
-      try {
-        this.getDataFromApi()
-        return true;
-      } catch (e) {
-        return false;
-      }
-    }
   },
 }
 </script>

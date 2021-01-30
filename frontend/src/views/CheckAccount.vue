@@ -193,13 +193,15 @@
           Veriler
         </v-expansion-panel-header>
         <v-expansion-panel-content>
-          <v-data-table
-              :headers="accountColumns"
-              :items="accountValues"
-              sort-by="firmaAdi"
-              class="elevation-1"
-          >
-            <template v-slot:top>
+          <v-form>
+
+            <v-data-table
+                :headers="accountColumns"
+                :items="accountValues"
+                sort-by="firmaAdi"
+                class="elevation-1"
+            >
+              <template v-slot:top>
                 <v-divider
                 ></v-divider>
                 <v-spacer></v-spacer>
@@ -215,96 +217,62 @@
                     <v-card-text>
                       <v-container>
                         <v-row>
-<!--                          <v-col>-->
-                            <v-text-field
-                                v-model="editedItem.firm_type"
-                                label="Firma Tipi"
-                            ></v-text-field>
-<!--                          </v-col>-->
-<!--                          <v-col>-->
-                            <v-text-field
-                                v-model="editedItem.firm_full_name"
-                                label="Firma Adı"
-                            ></v-text-field>
-<!--                          </v-col>-->
-<!--                          <v-col>-->
-                            <v-text-field
-                                v-model="editedItem.taxpayer_number"
-                                label="Kimlik No"
-                            ></v-text-field>
-<!--                          </v-col>-->
-<!--                          <v-col>-->
-                            <v-text-field
-                                v-model="editedItem.birthplace"
-                                label="Doğum Yeri"
-                            ></v-text-field>
-<!--                          </v-col>-->
-<!--                          <v-col>-->
-                            <v-text-field
-                                v-model="editedItem.vdepartmani"
-                                label="Vergi Departmanı"
-                            ></v-text-field>
-<!--                          </v-col>-->
-<!--                          <v-col>-->
-                            <v-text-field
-                                v-model="editedItem.firmaddr"
-                                label="Firma Adresi"
-                            ></v-text-field>
-<!--                          </v-col>-->
-<!--                          <v-col>-->
-                            <v-text-field
-                                v-model="editedItem.firmcontact"
-                                label="Firma Contact"
-                            ></v-text-field>
-<!--                          </v-col>-->
-<!--                          <v-col>-->
-                            <v-text-field
-                                v-model="editedItem.sector"
-                                label="Sektör"
-                            ></v-text-field>
-<!--                          </v-col>-->
-<!--                          <v-col-->
-<!--                          >-->
-                            <v-text-field
-                                v-model="editedItem.city"
-                                label="Şehir"
-                            ></v-text-field>
-<!--                          </v-col>-->
-<!--                          <v-col-->
-<!--                          >-->
-                            <v-text-field
-                                v-model="editedItem.district"
-                                label="İlçe"
-                            ></v-text-field>
-<!--                          </v-col>-->
-<!--                          <v-col-->
-<!--                          >-->
-                            <v-text-field
-                                v-model="editedItem.phone_number"
-                                label="Tel No"
-                            ></v-text-field>
-<!--                          </v-col>-->
-<!--                          <v-col-->
-<!--                          >-->
-                            <v-text-field
-                                v-model="editedItem.fax"
-                                label="Fax"
-                            ></v-text-field>
-<!--                          </v-col>-->
-<!--                          <v-col-->
-<!--                          >-->
-                            <v-text-field
-                                v-model="editedItem.web_url"
-                                label="Vergi Departmanı"
-                            ></v-text-field>
-<!--                          </v-col>-->
-<!--                          <v-col-->
-<!--                          >-->
-                            <v-text-field
-                                v-model="editedItem.email_addr"
-                                label="Email"
-                            ></v-text-field>
-<!--                          </v-col>-->
+                          <v-text-field
+                              v-model="editedItem.firm_type"
+                              label="Firma Tipi"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="editedItem.firm_full_name"
+                              label="Firma Adı"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="editedItem.taxpayer_number"
+                              label="Kimlik No"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="editedItem.birthplace"
+                              label="Doğum Yeri"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="editedItem.tax_department"
+                              label="Vergi Departmanı"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="editedItem.firm_address"
+                              label="Firma Adresi"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="editedItem.firm_key_contact_personnel"
+                              label="Firma Contact"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="editedItem.sector"
+                              label="Sektör"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="editedItem.city"
+                              label="Şehir"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="editedItem.district"
+                              label="İlçe"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="editedItem.phone_number"
+                              label="Tel No"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="editedItem.fax"
+                              label="Fax"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="editedItem.web_url"
+                              label="Vergi Departmanı"
+                          ></v-text-field>
+                          <v-text-field
+                              v-model="editedItem.email_addr"
+                              label="Email"
+                          ></v-text-field>
                         </v-row>
                       </v-container>
                     </v-card-text>
@@ -339,33 +307,30 @@
                     </v-card-actions>
                   </v-card>
                 </v-dialog>
-            </template>
+              </template>
 
-            <template v-slot:item.actions="{ item }">
-              <v-icon
-                  small
-                  class="mr-2"
-                  @click="editItem(item)"
-              >
-                mdi-pencil
-              </v-icon>
-              <v-icon
-                  small
-                  @click="deleteItem(item)"
-              >
-                mdi-delete
-              </v-icon>
-            </template>
+              <template v-slot:item.actions="{ item }">
+                <v-icon
+                    small
+                    class="mr-2"
+                    @click="editItem(item)"
+                >
+                  mdi-pencil
+                </v-icon>
+                <v-icon
+                    small
+                    @click="deleteItem(item)"
+                >
+                  mdi-delete
+                </v-icon>
+              </template>
 
-            <template v-slot:no-data>
-              <v-btn
-                  color="primary"
-                  @click="initialize"
-              >
-                Reset
-              </v-btn>
-            </template>
-          </v-data-table>
+              <template v-slot:no-data>
+                <v-card-text> Hiç veri bulunamamıştır </v-card-text>
+              </template>
+            </v-data-table>
+            <v-spacer></v-spacer>
+          </v-form>
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-expansion-panels>
@@ -388,6 +353,7 @@ export default {
   data: () => ({
     dialog: false,
     valid: false,
+    updateState: false,
 
     dialogDelete: false,
 
@@ -456,9 +422,9 @@ export default {
       {text: 'Firma Tipi', value: 'firm_type'},
       {text: 'Kimlik No', value: 'taxpayer_number'},
       {text: 'Doğum Yeri', value: 'birthplace'},
-      {text: 'Vergi Departmanı', vdepartmani: 'tax_department'},
-      {text: 'Firma Adresi', firmaddr: 'firm_address'},
-      {text: 'Firma İletişim', firmcontact: 'firm_key_contact_personnel'},
+      {text: 'Vergi Departmanı', value: 'tax_department'},
+      {text: 'Firma Adresi', value: 'firm_address'},
+      {text: 'Firma İletişim', value: 'firm_key_contact_personnel'},
       {text: 'Sektör', value: 'sector'},
       {text: 'Şehir', value: 'city'},
       {text: 'İlçe', value: 'district'},
@@ -532,14 +498,26 @@ export default {
 
   mounted() {
     axios.defaults.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('token');
+
     this.getDataFromApi();
   },
 
   methods: {
     async getAccounts() {
       const response = await axios.get(ACCOUNT_API)
-      console.log(response.data);
       this.accountValues = response.data
+    },
+
+    async deleteAccount() {
+      console.log("index : " + this.editedIndex)
+      console.log("item : " + JSON.stringify(this.accountValues[this.editedIndex]))
+      let data_id = this.accountValues[this.editedIndex].data_id;
+      console.log("data id " + JSON.stringify(data_id))
+
+      const DELETE_API = "http://127.0.0.1:8000/checkaccount/api/accounts/" + data_id
+      console.log("Delete api : " + DELETE_API);
+      const response = await axios.delete(DELETE_API)
+      console.log("response : " + response.data)
     },
 
     async getCities() {
@@ -580,6 +558,7 @@ export default {
     editItem(item) {
       this.editedIndex = this.accountValues.indexOf(item)
       this.editedItem = Object.assign({}, item)
+      this.updateState = true;
       this.dialog = true
     },
 
@@ -591,6 +570,8 @@ export default {
 
     deleteItemConfirm() {
       this.accountValues.splice(this.editedIndex, 1)
+      this.deleteAccount()
+
       this.closeDelete()
     },
 
@@ -604,6 +585,7 @@ export default {
 
     closeDelete() {
       this.dialogDelete = false
+
       this.$nextTick(() => {
         this.editedItem = Object.assign({}, this.defaultItem)
         this.editedIndex = -1
@@ -614,13 +596,11 @@ export default {
       console.log(this.editedItem);
       await this.save();
 
+      await this.getAccounts();
       this.accountValues.push(this.editedItem);
     },
 
-    async save() {
-      // const files = [this.partnershipDoc, this.faaliyetDoc, this.vergiDoc,
-      //   this.imzaDoc, this.managementDoc, this.identityDoc];
-
+    async postData() {
       let formData = new FormData();
       formData.append("partnership_structure_identity_copies", this.partnershipDoc);
       formData.append("activity_certificate_pdf", this.faaliyetDoc);
@@ -630,20 +610,20 @@ export default {
       formData.append("board_management", this.managementDoc);
       formData.append("identity_copies", this.identityDoc);
 
-      formData.append('Firma Adı', this.defaultItem.firm_full_name)
-      formData.append('Firma Tipi', this.defaultItem.firm_type)
-      formData.append('Kimlik No', this.defaultItem.taxpayer_number)
-      formData.append('Doğum Yeri', this.defaultItem.birthplace)
-      formData.append('Vergi Departmanı', this.defaultItem.tax_department)
-      formData.append('Firma Adresi', this.defaultItem.firm_address)
-      formData.append('Firma İletişim', this.defaultItem.firm_key_contact_personnel)
-      formData.append('Sektör', this.defaultItem.sector)
-      formData.append('Şehir', this.defaultItem.city)
-      formData.append('İlçe', this.defaultItem.district)
-      formData.append('Tel', this.defaultItem.phone_number)
-      formData.append('Fax', this.defaultItem.fax)
-      formData.append('Web', this.defaultItem.web_url)
-      formData.append('Email', this.defaultItem.email_addr)
+      formData.append('firm_full_name', this.firm_full_name)
+      formData.append('firm_type', this.firm_type)
+      formData.append('taxpayer_number', this.taxpayer_number)
+      formData.append('birthplace', this.birthplace)
+      formData.append('tax_department', this.tax_department)
+      formData.append('firm_address', this.firm_address)
+      formData.append('firm_key_contact_personnel', this.firm_key_contact_personnel)
+      formData.append('sector', this.sector)
+      formData.append('city', this.city)
+      formData.append('district', this.district)
+      formData.append('phone_number', this.phone_number)
+      formData.append('fax', this.fax)
+      formData.append('web_url', this.web_url)
+      formData.append('email_addr', this.email_addr)
 
       const response = await axios.post(ACCOUNT_API, formData, {
         headers: {
@@ -663,6 +643,70 @@ export default {
             }
           })
       )
+    },
+
+    async putData() {
+      let formData = new FormData();
+      formData.append("partnership_structure_identity_copies", this.editedItem.partnershipDoc);
+      formData.append("activity_certificate_pdf", this.editedItem.faaliyetDoc);
+      formData.append("tax_return_pdf", this.editedItem.vergiDoc);
+
+      formData.append("authorized_signatures_list_pdf", this.editedItem.imzaDoc);
+      formData.append("board_management", this.editedItem.managementDoc);
+      formData.append("identity_copies", this.editedItem.identityDoc);
+
+      formData.append('firm_full_name', this.editedItem.firm_full_name)
+      formData.append('firm_type', this.editedItem.firm_type)
+      formData.append('taxpayer_number', this.editedItem.taxpayer_number)
+      formData.append('birthplace', this.editedItem.birthplace)
+      formData.append('tax_department', this.editedItem.tax_department)
+      formData.append('firm_address', this.editedItem.firm_address)
+      formData.append('firm_key_contact_personnel', this.editedItem.firm_key_contact_personnel)
+      formData.append('sector', this.editedItem.sector)
+      formData.append('city', this.editedItem.city)
+      formData.append('district', this.editedItem.district)
+      formData.append('phone_number', this.editedItem.phone_number)
+      formData.append('fax', this.editedItem.fax)
+      formData.append('web_url', this.editedItem.web_url)
+      formData.append('email_addr', this.editedItem.email_addr)
+      console.log("form data : " + JSON.stringify(formData))
+
+      let data_id = this.accountValues[this.editedIndex].data_id;
+
+      const ACCOUNT_PUT_API = "http://127.0.0.1:8000/checkaccount/api/accounts/" + data_id + "/"
+      console.log("PUT API : " + ACCOUNT_PUT_API);
+
+      const response = await axios.put(ACCOUNT_PUT_API, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+          .then(
+          (response => {
+            console.log("status : " + response.status)
+            if (response.status !== 200) {
+              lstore.commit('showmsg', {text: "Hesap güncellenemedi", show: true})
+              console.log(response)
+            } else {
+              console.log("Hesap güncellendi !");
+              lstore.commit('showmsg', {
+                text: "Hesap güncellendi: " + response.data.firm_full_name
+                , show: true
+              });
+            }
+          })
+      )
+      console.log("put response : " + response)
+
+    },
+
+    async save() {
+      if (this.updateState) {
+        await this.putData()
+      } else {
+        await this.postData()
+      }
+      this.dialog = false;
     },
   },
 }

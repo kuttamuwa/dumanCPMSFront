@@ -2,7 +2,6 @@ import Vue from "vue";
 import Vuex from "vuex";
 import axios from "axios";
 import jwt from "jsonwebtoken";
-import CheckAccount from "@/views/CheckAccount";
 
 
 Vue.use(Vuex);
@@ -47,15 +46,20 @@ export default new Vuex.Store({
 
         async login({commit}, loginData) {
             console.log("login geldi")
-            let response = (await axios.post("http://127.0.0.1:8000/auth/login/", loginData));
-            let token = response.data.token
-            commit("setToken", token)
-            commit("setUser", token);
 
-            axios.defaults.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('token');
+            try{
+                let response = (await axios.post("http://127.0.0.1:8000/auth/login/", loginData));
+                let token = response.data.token
+                commit("setToken", token)
+                commit("setUser", token);
 
-            // mesaj test
-            commit('showmsg', {text: 'Giriş yapıldı !', show: true})
+                axios.defaults.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('token');
+
+                commit('showmsg', {text: 'Giriş yapıldı !', show: true})
+            } catch (e) {
+                commit('showmsg', {text: 'Giriş yapılamadı !' + e, show: true})
+            }
+
         },
 
     }

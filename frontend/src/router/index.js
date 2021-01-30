@@ -24,16 +24,16 @@ const requireAuth = (to, from, next) => {
 }
 
 function checkPermission() {
-    try {
-        CheckAccount.methods.getDataFromApi();
-    } catch (e) {
-        console.log("Hata : " + e)
-    }
+    // try {
+    //     CheckAccount.methods.getDataFromApi();
+    // } catch (e) {
+    //     console.log("Hata : " + e)
+    // }
 
 
     const PERM_API = "http://127.0.0.1:8000/appconfig/getperms/"
-    const response = axios.get(PERM_API)
-    console.log(response)
+    // const response = axios.get(PERM_API)
+    // console.log(response)
 }
 
 const routes = [

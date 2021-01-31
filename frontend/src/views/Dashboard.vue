@@ -140,6 +140,16 @@ export default {
   },
 
   methods: {
+    async getPerms() {
+      let url = DASHBOARD_RD_API + "/?dtype=l"
+      const response = await axios.get(url)
+      return response.status !== 401
+    },
+
+    async getDataFromApi() {
+      await this.getlimitasanlar();
+    },
+
     async getlimitasanlar() {
       var url = DASHBOARD_RD_API + "/?dtype=l"
       const response = await axios.get(url);

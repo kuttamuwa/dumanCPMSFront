@@ -326,7 +326,7 @@
               </template>
 
               <template v-slot:no-data>
-                <v-card-text> Hiç veri bulunamamıştır </v-card-text>
+                <v-card-text> Hiç veri bulunamamıştır</v-card-text>
               </template>
             </v-data-table>
             <v-spacer></v-spacer>
@@ -508,6 +508,11 @@ export default {
       this.accountValues = response.data
     },
 
+    async getPerms() {
+      const response = await axios.get(ACCOUNT_API)
+      return response.status !== 401;
+    },
+
     async deleteAccount() {
       console.log("index : " + this.editedIndex)
       console.log("item : " + JSON.stringify(this.accountValues[this.editedIndex]))
@@ -682,20 +687,20 @@ export default {
         },
       })
           .then(
-          (response => {
-            console.log("status : " + response.status)
-            if (response.status !== 200) {
-              lstore.commit('showmsg', {text: "Hesap güncellenemedi", show: true})
-              console.log(response)
-            } else {
-              console.log("Hesap güncellendi !");
-              lstore.commit('showmsg', {
-                text: "Hesap güncellendi: " + response.data.firm_full_name
-                , show: true
-              });
-            }
-          })
-      )
+              (response => {
+                console.log("status : " + response.status)
+                if (response.status !== 200) {
+                  lstore.commit('showmsg', {text: "Hesap güncellenemedi", show: true})
+                  console.log(response)
+                } else {
+                  console.log("Hesap güncellendi !");
+                  lstore.commit('showmsg', {
+                    text: "Hesap güncellendi: " + response.data.firm_full_name
+                    , show: true
+                  });
+                }
+              })
+          )
       console.log("put response : " + response)
 
     },

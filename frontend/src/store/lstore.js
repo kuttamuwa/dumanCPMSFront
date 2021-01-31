@@ -6,12 +6,13 @@ import jwt from "jsonwebtoken";
 
 Vue.use(Vuex);
 
-process.DJ_SECRET_KEY = undefined;
 export default new Vuex.Store({
     state: {
         messages: [],
         token: localStorage.getItem("token") || "",
         user: localStorage.getItem("user" || null),
+        userimg: localStorage.getItem("userimg" || null),
+
         snackbar: {
             show: false,
             text: ''
@@ -27,26 +28,27 @@ export default new Vuex.Store({
 
         setUser(state) {
             let data = jwt.decode(state.token, process.env.VUE_APP_DJ_SECRET_KEY)
+            console.log("set user data : " + JSON.stringify(data))
             localStorage.setItem("user", data.username)
         },
 
         logout(state) {
+            console.log("Logged out ");
             state.token = "";
             localStorage.removeItem("token");
             localStorage.removeItem("user");
         },
 
         showmsg(state, payload) {
-          state.snackbar.text = payload.text;
-          state.snackbar.show = payload.show
+            state.snackbar.text = payload.text;
+            state.snackbar.show = payload.show
         },
 
     },
 
     actions: {
-
         async login({commit}, loginData) {
-            try{
+            try {
                 let response = (await axios.post("http://127.0.0.1:8000/auth/login/", loginData));
                 let token = response.data.token
                 commit("setToken", token)
@@ -61,5 +63,8 @@ export default new Vuex.Store({
 
         },
 
+        async logoutserv({commit}) {
+            await commit('logout')
+        }
     }
 })

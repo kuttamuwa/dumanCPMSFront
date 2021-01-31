@@ -11,15 +11,14 @@
 
       <v-list-item class="px-2">
         <v-list-item-avatar>
-          <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+          <v-img v-model="kullanici_img"></v-img>
         </v-list-item-avatar>
 
-        <v-list-item-title
-        v-text="kullanici"></v-list-item-title>
+        <v-list-item-title v-text="kullanici"></v-list-item-title>
 
         <v-btn
             icon
-            @click.stop="mini = !mini"
+            @click="pushAdmin"
         >
           <v-icon>mdi-chess-rook</v-icon>
         </v-btn>
@@ -71,11 +70,7 @@
 
       <v-app-bar-title>360 Müşteri Performans Yönetim Platformu</v-app-bar-title>
       <v-spacer></v-spacer>
-      <v-btn
-          to="/logout"
-      @click="clearUser">
-        <v-icon>mdi-logout</v-icon>
-      </v-btn>
+      <v-card-title>{{kullanici}}</v-card-title>
 
     </v-app-bar>
 
@@ -89,14 +84,16 @@
 <script>
 import MsgComponent from "@/components/msgComponent";
 import axios from "axios";
-import lstore from "@/store/lstore";
 import CheckAccount from "@/views/CheckAccount";
+import RiskAnalysis from "@/views/RiskAnalysis";
+import Dashboard from "@/views/Dashboard";
+
 export default {
   components: {MsgComponent},
   data: () => (
       {
-        kullanici: '',
-        kullanici_img: '',
+        kullanici: localStorage.getItem('user'),
+        kullanici_img: localStorage.getItem('userimg'),
 
         drawer: null,
         items: [
@@ -105,40 +102,71 @@ export default {
           {title: 'Risk Analiz', icon: 'mdi-database-edit', to: '/riskanalysis'},
           {title: 'About', icon: 'mdi-help-box', to: '/about'},
           {title: 'Dashboard', icon: 'mdi-view-dashboard', to: '/dashboard'},
-
-          {title: 'Test', icon: 'mdi-view-dashboard', to: '/test'},
+          {title: 'Admin', icon: 'mdi-admin', to: '/admin'},
+          {title: 'Login', icon: 'mdi-login', to: '/login'},
+          {title: 'Logout', icon: 'mdi-logout', to: '/logout'},
+          {title: 'Test', icon: 'mdi-test', to:'/test'}
         ],
       }),
 
   methods: {
+
+    pushAdmin() {
+      this.$router.push('/admin')
+    },
+
     setAvatar() {
-      // todo: avatar işi sonradan pas geçilebilir, bakalım
-      const AVATAR_API = ""
-      const response = axios.get()
-    },
+      if (this.kullanici !== null) {
+        axios.defaults.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('token');
 
-    clearUser() {
-      this.kullanici = ""
-    },
-
-    permCA() {
-      try {
-        CheckAccount.methods.getAccounts();
-      } catch (e) {
-        console.log(e)
+        const AVATAR_API = "http://127.0.0.1:8000/appconfig/getavatar/" + this.kullanici
+        console.log(AVATAR_API)
+        const response = axios.get(AVATAR_API)
+        console.log("avatar response : " + response)
+        if (response.status === 200) {
+          console.log("avatar response : " + response.data)
+          this.kullanici_img = response.data
+        }
       }
     },
 
-    testPermissions() {
+    permCA() {
+      if (CheckAccount.methods.getPerms() === false) {
+        this.items = this.items.filter(function (i) {
+          return i.title !== 'Cari Hesap'
+        })
+      }
+    },
+
+    permRA() {
+      if (RiskAnalysis.methods.getPerms() === false) {
+        this.items = this.items.filter(function (i) {
+          return i.title !== 'Risk Analiz'
+        })
+      }
+    },
+
+    permDA() {
+      if (Dashboard.methods.getPerms() === false) {
+        this.items = this.items.filter(function (i) {
+          return i.title !== 'Dashboard'
+        })
+      }
+    },
+
+    setPermissions() {
       this.permCA();
+      this.permRA();
+      this.permDA();
     }
   },
 
 
   mounted() {
-    this.kullanici = localStorage.getItem("user");
-    this.testPermissions();
-    // this.setAvatar();
+    console.log("App mounted !")
+
+    this.setPermissions();
+    this.setAvatar();
   }
 }
 </script>

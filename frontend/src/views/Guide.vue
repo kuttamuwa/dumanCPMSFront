@@ -1,17 +1,56 @@
 <template>
-  <h1> 360 Müşteri Performans Yönetim Sistemi Kullanım Klavuzu </h1>
-  
+  <div class="small">
+    <line-chart :chart-data="datacollection"></line-chart>
+    <button @click="fillData()">Randomize</button>
+
+    <h1>DJ SECRET KEY {{djsecretkey}}</h1>
+  </div>
 </template>
 
 <script>
-export default {
-  name: "Guide",
-  data: () => {
+import LineChart from "@/charts/LineChart";
 
+export default {
+  components: {
+    LineChart
+  },
+  data () {
+    return {
+      datacollection: null,
+      djsecretkey: process.env.VUE_APP_DJ_SECRET_KEY
+    }
+  },
+  mounted () {
+    console.log("django secret key : " + this.djsecretkey)
+    this.fillData()
+  },
+  methods: {
+    fillData () {
+      this.datacollection = {
+        labels: [this.getRandomInt(), this.getRandomInt()],
+        datasets: [
+          {
+            label: 'Data One',
+            backgroundColor: '#f87979',
+            data: [this.getRandomInt(), this.getRandomInt()]
+          }, {
+            label: 'Data One',
+            backgroundColor: '#f87979',
+            data: [this.getRandomInt(), this.getRandomInt()]
+          }
+        ]
+      }
+    },
+    getRandomInt () {
+      return Math.floor(Math.random() * (50 - 5 + 1)) + 5
+    }
   }
 }
 </script>
 
-<style scoped>
-
+<style>
+.small {
+  max-width: 600px;
+  margin:  150px auto;
+}
 </style>

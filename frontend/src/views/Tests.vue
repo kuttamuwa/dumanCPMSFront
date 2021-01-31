@@ -1,52 +1,22 @@
 <template>
-  <div class="small">
-    <line-chart :chart-data="datacollection"></line-chart>
-    <button @click="fillData()">Randomize</button>
-  </div>
+
 </template>
 
 <script>
-import LineChart from "@/charts/LineChart";
-
 export default {
-  components: {
-    LineChart
+  name: 'Tests',
+  props:{
+    msg: String
   },
-  data () {
-    return {
-      datacollection: null
+
+  data() {
+    return{
+      env: process.env.VUE_APP_DJ_SECRET_KEY
     }
   },
-  mounted () {
-    this.fillData()
-  },
-  methods: {
-    fillData () {
-      this.datacollection = {
-        labels: [this.getRandomInt(), this.getRandomInt()],
-        datasets: [
-          {
-            label: 'Data One',
-            backgroundColor: '#f87979',
-            data: [this.getRandomInt(), this.getRandomInt()]
-          }, {
-            label: 'Data One',
-            backgroundColor: '#f87979',
-            data: [this.getRandomInt(), this.getRandomInt()]
-          }
-        ]
-      }
-    },
-    getRandomInt () {
-      return Math.floor(Math.random() * (50 - 5 + 1)) + 5
-    }
+
+  mounted() {
+    console.log("djkey: " + process.env.VUE_APP_DJ_SECRET_KEY)
   }
 }
 </script>
-
-<style>
-.small {
-  max-width: 600px;
-  margin:  150px auto;
-}
-</style>

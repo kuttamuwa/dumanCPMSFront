@@ -197,6 +197,10 @@ export default {
   },
 
   methods: {
+    async getPerms() {
+      const response = await axios.get(RISKDATASET_API)
+      return response.status !== 401
+    },
 
     async getDataFromApi() {
       await this.getRiskDataset();

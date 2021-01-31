@@ -8,6 +8,8 @@
   },
   "dependencies": {
     "@tmigone/vuetify-easy-crud": "^1.6.0",
+    "@websanova/vue-dot": "^0.1.2",
+    "@websanova/vue-env": "^0.6.2",
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
     "chart.js": "^2.9.4",

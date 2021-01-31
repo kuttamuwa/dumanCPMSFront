@@ -90,6 +90,7 @@
 import MsgComponent from "@/components/msgComponent";
 import axios from "axios";
 import lstore from "@/store/lstore";
+import CheckAccount from "@/views/CheckAccount";
 export default {
   components: {MsgComponent},
   data: () => (
@@ -105,12 +106,13 @@ export default {
           {title: 'About', icon: 'mdi-help-box', to: '/about'},
           {title: 'Dashboard', icon: 'mdi-view-dashboard', to: '/dashboard'},
 
-          {title: 'Test', icon: 'mdi-test', to: '/test'},
+          {title: 'Test', icon: 'mdi-view-dashboard', to: '/test'},
         ],
       }),
 
   methods: {
     setAvatar() {
+      // todo: avatar işi sonradan pas geçilebilir, bakalım
       const AVATAR_API = ""
       const response = axios.get()
     },
@@ -119,16 +121,23 @@ export default {
       this.kullanici = ""
     },
 
-    testPermissions() {
-      for (const key in this.items) {
-
+    permCA() {
+      try {
+        CheckAccount.methods.getAccounts();
+      } catch (e) {
+        console.log(e)
       }
+    },
+
+    testPermissions() {
+      this.permCA();
     }
   },
 
 
   mounted() {
     this.kullanici = localStorage.getItem("user");
+    this.testPermissions();
     // this.setAvatar();
   }
 }

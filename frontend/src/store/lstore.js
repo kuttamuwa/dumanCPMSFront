@@ -6,6 +6,7 @@ import jwt from "jsonwebtoken";
 
 Vue.use(Vuex);
 
+process.DJ_SECRET_KEY = undefined;
 export default new Vuex.Store({
     state: {
         messages: [],
@@ -25,7 +26,7 @@ export default new Vuex.Store({
         },
 
         setUser(state) {
-            let data = jwt.decode(state.token, "d_hy!@)01pkm38_tgq$r_n&yyxft%1$7#r8iih5$!gnnjj_=wj")
+            let data = jwt.decode(state.token, process.env.VUE_APP_DJ_SECRET_KEY)
             localStorage.setItem("user", data.username)
         },
 
@@ -45,8 +46,6 @@ export default new Vuex.Store({
     actions: {
 
         async login({commit}, loginData) {
-            console.log("login geldi")
-
             try{
                 let response = (await axios.post("http://127.0.0.1:8000/auth/login/", loginData));
                 let token = response.data.token

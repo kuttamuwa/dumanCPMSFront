@@ -66,22 +66,31 @@
             Veriler
           </v-expansion-panel-header>
           <v-expansion-panel-content>
-            <v-data-table
-                :headers="riskdatasetColumns"
-                :items="riskdatasetValues"
-                :items-per-page="10"
-                class="elevation-1"
-            >
-              <template v-slot:item.actions="{ item }">
-                <v-icon
-                    small
-                    class="mr-2"
-                    @click="analyzeItem(item)"
-                >
-                  mdi-tools
-                </v-icon>
-              </template>
-            </v-data-table>
+            <v-form>
+              <v-data-table
+                  :headers="riskdatasetColumns"
+                  :items="riskdatasetValues"
+                  :items-per-page="10"
+                  class="elevation-1"
+              >
+                <template v-slot:item.actions="{ item }">
+                  <v-icon
+                      small
+                      class="mr-2"
+                      @click="analyzeItem(item)"
+                  >
+                    mdi-tools
+                  </v-icon>
+                </template>
+
+                <template v-slot:no-data>
+                  <v-card-text> Hiç veri bulunamamıştır </v-card-text>
+                </template>
+
+              </v-data-table>
+              <v-spacer></v-spacer>
+            </v-form>
+
           </v-expansion-panel-content>
         </v-expansion-panel>
 
@@ -204,7 +213,6 @@ export default {
       this.$refs.observer.reset()
     },
 
-
     async analyzeItem(item) {
       let index = this.riskdatasetValues.indexOf(item);
       let pk = this.riskdatasetValues[index].data_id;
@@ -234,10 +242,8 @@ export default {
               this.alert_text = response.data
             } else {
               console.log("YÜKLEME BAŞARILI")
-              this.alert_text = "Veriler yüklendi"
-              this.alert_type = "succeed";
+              this.$store.commit('showmsg', {text: "Verileriniz yüklendi", show: true})
             }
-            this.alert_status = true;
           })
       );
       console.log("veri yollandi cevabi " + response);

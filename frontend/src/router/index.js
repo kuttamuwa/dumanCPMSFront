@@ -21,10 +21,28 @@ const requireAuth = (to, from, next) => {
 
 const routes = [
     {
+        path: "/login",
+        name: "Login",
+        component: () => import('../views/Login.vue'),
+    },
+
+    {
+        path: "/logout",
+        name: "Logout",
+        component: () => import('../views/Logout.vue')
+    },
+
+    {
+        path: "/forgetpwd",
+        name: "ForgetPwd",
+        component: () => import('../views/ForgetPwd.vue')
+    },
+
+    {
         path: '/',
         name: 'Home',
         component: Home,
-        beforeEnter: requireAuth
+        // beforeEnter: requireAuth
     },
 
     {
@@ -53,24 +71,11 @@ const routes = [
         component: () => import('../views/About.vue')
     },
 
-    {
-        path: "/login",
-        name: "Login",
-        component: () => import('../views/Login.vue'),
-    },
 
-    {
-        path: "/logout",
-        name: "Logout",
-        component: () => import('../views/Logout')
-    },
 
     {
         path: "/admin",
         name: "Admin",
-        // beforeEnter() {
-        //     location.href = '127.0.0.1:8000/admin'
-        // },
         component: () => import('../views/Admin.vue')
     },
 

@@ -12,6 +12,8 @@ export default new Vuex.Store({
         token: localStorage.getItem("token") || "",
         user: localStorage.getItem("user" || null),
         userimg: localStorage.getItem("userimg" || null),
+        expired: localStorage.getItem("expired" || null),
+        logged: localStorage.getItem("logged" || false),
 
         snackbar: {
             show: false,
@@ -22,8 +24,25 @@ export default new Vuex.Store({
     },
 
     mutations: {
-        setToken(state, token) {
+        setCredential(state, token) {
+            // set token
             localStorage.setItem("token", token);
+
+            // set user
+            let user = jwt.decode(token, process.env.VUE_APP_DJ_SECRET_KEY)
+            localStorage.setItem("username", user.username)
+
+            // set expired date
+            localStorage.setItem("expired", user.exp)
+            console.log("expired " + localStorage.getItem("expired"));
+
+            // set axios headers
+            this.setAxiosHeaders();
+        },
+
+        setAxiosHeaders() {
+            // axios header set
+            axios.defaults.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('token');
         },
 
         setUser(state) {
@@ -51,10 +70,8 @@ export default new Vuex.Store({
             try {
                 let response = (await axios.post("http://127.0.0.1:8000/auth/login/", loginData));
                 let token = response.data.token
-                commit("setToken", token)
-                commit("setUser", token);
 
-                axios.defaults.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('token');
+                commit('setCredential', token)
 
                 commit('showmsg', {text: 'Giriş yapıldı !', show: true})
             } catch (e) {

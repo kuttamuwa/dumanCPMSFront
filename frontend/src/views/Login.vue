@@ -1,6 +1,6 @@
 <template>
 
-  <v-flex sm8 offset-sm2 v-if="currentUser === 'Dış Kullanıcı'">
+  <v-flex sm8 offset-sm2>
     <v-card>
       <v-toolbar dark>
         <v-toolbar-title>Login</v-toolbar-title>
@@ -21,10 +21,6 @@
       </v-form>
     </v-card>
   </v-flex>
-  <v-flex v-else>
-    <v-card-text>Zaten giriş yapmıştınız</v-card-text>
-    <v-btn @click="logout"> Çıkmak mı istiyorsunuz?</v-btn>
-  </v-flex>
 </template>
 
 <script>
@@ -35,8 +31,6 @@ export default {
     return {
       userName: "",
       password: "",
-
-      currentUser: ""
     }
   },
 
@@ -48,25 +42,11 @@ export default {
       await this.$store.dispatch("login", {username: this.userName, password: this.password});
 
     },
-
-    async logout() {
-      await this.$store.dispatch("logoutserv")
-      await this.$router.push('/')
-    },
-
-    setCurrentUser() {
-      const usr = localStorage.getItem("user")
-      if (usr === null) {
-        this.currentUser = "Dış Kullanıcı"
-      } else {
-        this.currentUser = usr
-      }
-    }
   },
 
   mounted() {
-    this.setCurrentUser();
-    console.log("current user : " + this.currentUser)
+    console.log("Login page ")
+
   }
 }
 </script>

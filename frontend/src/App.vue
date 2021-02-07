@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire">
+  <v-app id="inspire" v-if="logged === true">
     <v-navigation-drawer
         v-model="drawer"
         app
@@ -79,23 +79,30 @@
       <router-view></router-view>
     </v-main>
   </v-app>
+  <v-container v-else>
+    <Login></Login>
+  </v-container>
 </template>
 
 <script>
 import MsgComponent from "@/components/msgComponent";
 import axios from "axios";
-import CheckAccount from "@/views/CheckAccount";
-import RiskAnalysis from "@/views/RiskAnalysis";
-import Dashboard from "@/views/Dashboard";
+// import CheckAccount from "@/views/CheckAccount";
+// import RiskAnalysis from "@/views/RiskAnalysis";
+// import Dashboard from "@/views/Dashboard";
+// import LoginCard from "@/components/LoginComponents/LoginCard";
+import Login from "@/components/LoginComponents/Login";
 
 export default {
-  components: {MsgComponent},
+  components: {Login, MsgComponent},
   data: () => (
       {
         kullanici: localStorage.getItem('user'),
         kullanici_img: localStorage.getItem('userimg'),
 
         drawer: null,
+        logged: localStorage.getItem("logged"),
+
         items: [
           {title: 'Ana Sayfa', icon: 'mdi-home', to: '/'},
           {title: 'Cari Hesap', icon: 'mdi-account-cash', to: '/checkaccount'},
@@ -130,42 +137,42 @@ export default {
       }
     },
 
-    permCA() {
-      if (CheckAccount.methods.getPerms() === false) {
-        this.items = this.items.filter(function (i) {
-          return i.title !== 'Cari Hesap'
-        })
-      }
-    },
-
-    permRA() {
-      if (RiskAnalysis.methods.getPerms() === false) {
-        this.items = this.items.filter(function (i) {
-          return i.title !== 'Risk Analiz'
-        })
-      }
-    },
-
-    permDA() {
-      if (Dashboard.methods.getPerms() === false) {
-        this.items = this.items.filter(function (i) {
-          return i.title !== 'Dashboard'
-        })
-      }
-    },
-
-    setPermissions() {
-      this.permCA();
-      this.permRA();
-      this.permDA();
-    }
+  //   permCA() {
+  //     if (CheckAccount.methods.getPerms() === false) {
+  //       this.items = this.items.filter(function (i) {
+  //         return i.title !== 'Cari Hesap'
+  //       })
+  //     }
+  //   },
+  //
+  //   permRA() {
+  //     if (RiskAnalysis.methods.getPerms() === false) {
+  //       this.items = this.items.filter(function (i) {
+  //         return i.title !== 'Risk Analiz'
+  //       })
+  //     }
+  //   },
+  //
+  //   permDA() {
+  //     if (Dashboard.methods.getPerms() === false) {
+  //       this.items = this.items.filter(function (i) {
+  //         return i.title !== 'Dashboard'
+  //       })
+  //     }
+  //   },
+  //
+  //   setPermissions() {
+  //     this.permCA();
+  //     this.permRA();
+  //     this.permDA();
+  //   }
   },
 
 
   mounted() {
     console.log("App mounted !")
 
-    this.setPermissions();
+    // this.setPermissions();
     this.setAvatar();
   }
 }

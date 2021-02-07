@@ -9,14 +9,14 @@
         <v-container>
           <v-layout>
             <v-flex>
-              <v-text-field v-model="userName" label="User Name" required/>
+              <v-text-field v-model="username" label="User Name" required/>
             </v-flex>
 
             <v-flex>
               <v-text-field v-model="password" label="Password" required/>
             </v-flex>
           </v-layout>
-          <v-btn @click="login">Login</v-btn>
+          <v-btn @click="loginfn">Login</v-btn>
         </v-container>
       </v-form>
     </v-card>
@@ -29,18 +29,18 @@ export default {
 
   data() {
     return {
-      userName: "",
+      username: "",
       password: "",
     }
   },
 
   methods: {
-    async login() {
-      console.log(this.userName);
+    async loginfn() {
+      console.log(this.username);
       console.log(this.password);
 
-      await this.$store.dispatch("login", {username: this.userName, password: this.password});
-
+      const user = await this.$store.dispatch("login", {username: this.username, password: this.password});
+      console.log("logged user : " + user)
     },
   },
 

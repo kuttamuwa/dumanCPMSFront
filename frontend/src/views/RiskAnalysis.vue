@@ -121,41 +121,18 @@ export default {
     fileRules: [],
 
     riskdatasetColumns: [
-      {text: 'Müşteri', align: 'start', value: 'musteri'},
-      {text: 'Son 12 Aylık Toplam Ciro', value: 'ciro'},
-      {text: 'Limit', value: 'limit'},
-      {text: 'Teminat Durumu', value: 'teminat_durumu'},
-      {text: 'Teminat Tutarı', value: 'teminat_tutari'},
-      {text: 'Vade', value: 'vade'},
-      {text: 'Vade Aşımı Ortalaması', value: 'vade_asimi_ortalamasi'},
-      {text: 'Ödeme Sıklığı', value: 'odeme_sikligi'},
-      {text: '12 Aylık Ortalama Sipariş Tutarı', value: 'ort_siparis_tutari_12ay'},
-      {text: '1 Aylık Ortalama Sipariş Tutarı', value: 'ort_siparis_tutari_1ay'},
-      {text: 'Son Ay İade Yüzdesi', value: 'iade_yuzdesi_1'},
-      {text: 'Son 12 Ay İade Yüzdesi', value: 'iade_yuzdesi_12'},
-      {text: 'Ortalama Gecikme Gün Sayısı', value: 'ort_gecikme_gun_sayisi'},
-      {text: 'Ortalama Gecikme Gün Bakiyesi', value: 'ort_gecikme_gun_bakiyesi'},
-      {text: 'Bakiye', value: 'bakiye'},
+      {text: 'Data ID', value: 'data_id'},
+      {text: 'Müşteri', align: 'start', value: 'firm_full_name'},
+      {text: 'VKNTC', value: 'taxpayer_number'},
       {text: 'Analiz Puanı', value: 'general_point'},
       {text: 'Analiz Et', value: 'actions', sortable: false},
     ],
 
     defaultItem: {
-      musteri: '',
-      ciro: '',
-      limit: '',
-      teminat_durumu: '',
-      teminat_tutari: '',
-      vade: '',
-      vade_asimi_ortalamasi: '',
-      odeme_sikligi: '',
-      ort_siparis_tutari_12ay: '',
-      ort_siparis_tutari_1ay: '',
-      iade_yuzdesi_1: '',
-      iade_yuzdesi_12: '',
-      ort_gecikme_gun_sayisi: '',
-      ort_gecikme_gun_bakiyesi: '',
-      bakiye: ''
+      data_id: '',
+      firm_full_name: '',
+      taxpayer_number: '',
+      general_point: '',
     },
 
     riskdatasetValues: [
@@ -163,24 +140,6 @@ export default {
     ],
 
     editedIndex: -1,
-
-    editedItem: {
-      musteri: '',
-      ciro: '',
-      limit: '',
-      teminat_durumu: '',
-      teminat_tutari: '',
-      vade: '',
-      vade_asimi_ortalamasi: '',
-      odeme_sikligi: '',
-      ort_siparis_tutari_12ay: '',
-      ort_siparis_tutari_1ay: '',
-      iade_yuzdesi_1: '',
-      iade_yuzdesi_12: '',
-      ort_gecikme_gun_sayisi: '',
-      ort_gecikme_gun_bakiyesi: '',
-      bakiye: ''
-    }
   }),
 
   watch: {
@@ -246,6 +205,7 @@ export default {
               this.alert_text = response.data
             } else {
               console.log("YÜKLEME BAŞARILI")
+              console.log("fetched data : " + response.data)
               this.$store.commit('showmsg', {text: "Verileriniz yüklendi", show: true})
             }
           })

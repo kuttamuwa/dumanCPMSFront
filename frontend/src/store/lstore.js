@@ -9,11 +9,11 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         messages: [],
-        token: localStorage.getItem("token") || "",
-        user: localStorage.getItem("user" || null),
-        userimg: localStorage.getItem("userimg" || null),
-        expired: localStorage.getItem("expired" || null),
-        logged: localStorage.getItem("logged" || false),
+        token: localStorage.getItem("token") || null,
+        user: localStorage.getItem("user") || null,
+        userimg: localStorage.getItem("userimg") || null,
+        expired: localStorage.getItem("expired") || null,
+        logged: localStorage.getItem("logged") || false,
 
         snackbar: {
             show: false,
@@ -27,28 +27,26 @@ export default new Vuex.Store({
         setCredential(state, token) {
             // set token
             localStorage.setItem("token", token);
+            this.state.token = token;
 
             // set user
             let user = jwt.decode(token, process.env.VUE_APP_DJ_SECRET_KEY)
-            localStorage.setItem("username", user.username)
+            localStorage.setItem("user", user.username)
+            this.state.user = user.username
 
             // set expired date
             localStorage.setItem("expired", user.exp)
-            console.log("expired " + localStorage.getItem("expired"));
+            this.state.expired = user.exp
+            // console.log("expired " + localStorage.getItem("expired"));
 
             // set axios headers
-            this.setAxiosHeaders();
-        },
+            axios.defaults.headers.common['Authorization'] = 'JWT ' + token;
 
-        setAxiosHeaders() {
-            // axios header set
-            axios.defaults.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('token');
-        },
+            // log state
+            this.state.logged = true;
 
-        setUser(state) {
-            let data = jwt.decode(state.token, process.env.VUE_APP_DJ_SECRET_KEY)
-            console.log("set user data : " + JSON.stringify(data))
-            localStorage.setItem("user", data.username)
+            // console.log("Everything set : \n")
+            console.log("after set :" + this.state.user)
         },
 
         logout(state) {
@@ -63,17 +61,27 @@ export default new Vuex.Store({
             state.snackbar.show = payload.show
         },
 
+        getCredentialstate(state) {
+            return state.user
+        }
+
     },
 
     actions: {
         async login({commit}, loginData) {
             try {
-                let response = (await axios.post("http://127.0.0.1:8000/auth/login/", loginData));
+                const response = await axios.post("http://127.0.0.1:8000/auth/login/", loginData);
                 let token = response.data.token
 
                 commit('setCredential', token)
+                let user = this.state.user
+
+                console.log("user : " + JSON.stringify(user))
+                // console.log("user2 : " + JSON.stringify(user2))
 
                 commit('showmsg', {text: 'Giriş yapıldı !', show: true})
+                return user
+
             } catch (e) {
                 commit('showmsg', {text: 'Giriş yapılamadı !' + e, show: true})
             }

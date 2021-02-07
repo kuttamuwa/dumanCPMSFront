@@ -1,5 +1,5 @@
 <template>
-  <v-app id="inspire" v-if="logged === true">
+  <v-app id="inspire" v-if="kullanici !== null">
     <v-navigation-drawer
         v-model="drawer"
         app
@@ -70,8 +70,11 @@
 
       <v-app-bar-title>360 Müşteri Performans Yönetim Platformu</v-app-bar-title>
       <v-spacer></v-spacer>
-      <v-card-title>{{kullanici}}</v-card-title>
-
+      <v-card-title>{{ kullanici }}</v-card-title>
+      <v-btn @click="logout">
+        <v-icon> mdi-logout</v-icon>
+        Çıkış Yap
+      </v-btn>
     </v-app-bar>
 
     <v-main>
@@ -79,6 +82,7 @@
       <router-view></router-view>
     </v-main>
   </v-app>
+
   <v-container v-else>
     <Login></Login>
   </v-container>
@@ -87,32 +91,22 @@
 <script>
 import MsgComponent from "@/components/msgComponent";
 import axios from "axios";
-// import CheckAccount from "@/views/CheckAccount";
-// import RiskAnalysis from "@/views/RiskAnalysis";
-// import Dashboard from "@/views/Dashboard";
-// import LoginCard from "@/components/LoginComponents/LoginCard";
-import Login from "@/components/LoginComponents/Login";
+
+import Login from "@/views/Login";
 
 export default {
   components: {Login, MsgComponent},
   data: () => (
       {
-        kullanici: localStorage.getItem('user'),
-        kullanici_img: localStorage.getItem('userimg'),
+        kullanici: localStorage.getItem('user') || null,
+        kullanici_img: localStorage.getItem('userimg') || null,
 
         drawer: null,
-        logged: localStorage.getItem("logged"),
 
         items: [
           {title: 'Ana Sayfa', icon: 'mdi-home', to: '/'},
           {title: 'Cari Hesap', icon: 'mdi-account-cash', to: '/checkaccount'},
           {title: 'Risk Analiz', icon: 'mdi-database-edit', to: '/riskanalysis'},
-          {title: 'About', icon: 'mdi-help-box', to: '/about'},
-          {title: 'Dashboard', icon: 'mdi-view-dashboard', to: '/dashboard'},
-          {title: 'Admin', icon: 'mdi-admin', to: '/admin'},
-          {title: 'Login', icon: 'mdi-login', to: '/login'},
-          {title: 'Logout', icon: 'mdi-logout', to: '/logout'},
-          {title: 'Test', icon: 'mdi-test', to:'/test'}
         ],
       }),
 
@@ -137,43 +131,30 @@ export default {
       }
     },
 
-  //   permCA() {
-  //     if (CheckAccount.methods.getPerms() === false) {
-  //       this.items = this.items.filter(function (i) {
-  //         return i.title !== 'Cari Hesap'
-  //       })
-  //     }
-  //   },
-  //
-  //   permRA() {
-  //     if (RiskAnalysis.methods.getPerms() === false) {
-  //       this.items = this.items.filter(function (i) {
-  //         return i.title !== 'Risk Analiz'
-  //       })
-  //     }
-  //   },
-  //
-  //   permDA() {
-  //     if (Dashboard.methods.getPerms() === false) {
-  //       this.items = this.items.filter(function (i) {
-  //         return i.title !== 'Dashboard'
-  //       })
-  //     }
-  //   },
-  //
-  //   setPermissions() {
-  //     this.permCA();
-  //     this.permRA();
-  //     this.permDA();
-  //   }
+    logout() {
+      this.$store.commit("logout");
+      this.kullanici = null;
+      this.kullanici_img = null
+    },
+
+    getCredential() {
+      const user = this.$store.commit("getCredentialstate")
+
+      console.log("app page user : " + user)
+      // console.log("local storage user : " + localStorage.getItem("user"))
+      // console.log("app kullanici : " + this.kullanici)
+      this.kullanici = user;
+    }
   },
 
 
   mounted() {
-    console.log("App mounted !")
+    console.log("guard in app : " + this.$store.state.user)
 
-    // this.setPermissions();
+    this.getCredential();
     this.setAvatar();
-  }
+    console.log("App mounted !")
+  },
+
 }
 </script>

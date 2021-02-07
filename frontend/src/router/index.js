@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+
 // site views
 import Home from '../views/Home.vue'
+import lstore from "@/store/lstore";
 // modules
 
 
@@ -29,7 +31,7 @@ const routes = [
     {
         path: "/logout",
         name: "Logout",
-        component: () => import('../views/Logout.vue')
+        component: () => import('../views/Logout.vue'),
     },
 
     {
@@ -42,21 +44,39 @@ const routes = [
         path: '/',
         name: 'Home',
         component: Home,
-        // beforeEnter: requireAuth
+        beforeEnter(to, from, next) {
+            if (lstore.state.user === null) {
+                next('/login')
+            } else {
+                next()
+            }
+        }
     },
 
     {
         path: '/checkaccount',
         name: 'CheckAccount',
         component: () => import('../views/CheckAccount'),
-        beforeEnter: requireAuth
+        beforeEnter(to, from, next) {
+            if (lstore.state.user === null) {
+                next('/login')
+            } else {
+                next()
+            }
+        }
     },
 
     {
         path: "/riskanalysis",
         name: "RiskAnalysis",
         component: () => import('../views/RiskAnalysis'),
-        beforeEnter: requireAuth
+        beforeEnter(to, from, next) {
+            if (lstore.state.user === null) {
+                next('/login')
+            } else {
+                next()
+            }
+        }
     },
 
     {
@@ -70,8 +90,6 @@ const routes = [
         name: 'About',
         component: () => import('../views/About.vue')
     },
-
-
 
     {
         path: "/admin",
@@ -89,5 +107,6 @@ const routes = [
 const router = new VueRouter({
     routes
 })
+
 
 export default router

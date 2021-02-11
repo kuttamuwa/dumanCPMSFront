@@ -43,17 +43,18 @@ export default new Vuex.Store({
             axios.defaults.headers.common['Authorization'] = 'JWT ' + token;
 
             // log state
-            this.state.logged = true;
+            localStorage.setItem("logged", "true");
 
             // console.log("Everything set : \n")
             console.log("after set :" + this.state.user)
         },
 
         logout(state) {
-            console.log("Logged out ");
-            state.token = "";
-            localStorage.removeItem("token");
-            localStorage.removeItem("user");
+            state.logged = "false"
+            state.token = null
+            state.user = null
+            state.userimg = null
+            state.expired = null
         },
 
         showmsg(state, payload) {

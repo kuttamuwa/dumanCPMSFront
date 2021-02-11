@@ -9,29 +9,12 @@ import lstore from "@/store/lstore";
 
 Vue.use(VueRouter)
 
-// Route guard
-const requireAuth = (to, from, next) => {
-    const user = localStorage.getItem("user")
-    console.log("guard : " + user)
-    if (!user) {
-        next({name: "Login"})
-    } else {
-        next()
-    }
-}
-
 
 const routes = [
     {
         path: "/login",
         name: "Login",
         component: () => import('../views/Login.vue'),
-    },
-
-    {
-        path: "/logout",
-        name: "Logout",
-        component: () => import('../views/Logout.vue'),
     },
 
     {
@@ -45,7 +28,8 @@ const routes = [
         name: 'Home',
         component: Home,
         beforeEnter(to, from, next) {
-            if (lstore.state.user === null) {
+            if (lstore.state.logged !== "true") {
+                console.log("logine gitmeden önce")
                 next('/login')
             } else {
                 next()
@@ -58,7 +42,7 @@ const routes = [
         name: 'CheckAccount',
         component: () => import('../views/CheckAccount'),
         beforeEnter(to, from, next) {
-            if (lstore.state.user === null) {
+            if (lstore.state.logged !== "true") {
                 next('/login')
             } else {
                 next()
@@ -71,7 +55,7 @@ const routes = [
         name: "RiskAnalysis",
         component: () => import('../views/RiskAnalysis'),
         beforeEnter(to, from, next) {
-            if (lstore.state.user === null) {
+            if (lstore.state.logged !== "true") {
                 next('/login')
             } else {
                 next()

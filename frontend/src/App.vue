@@ -1,28 +1,27 @@
 <template>
-  <v-app id="inspire" v-if="kullanici !== null">
+  <v-app id="inspire">
     <v-navigation-drawer
         v-model="drawer"
         app
         dark
-        expand-on-hover
+        v-if="logged_state === 'true'"
     >
 
       <v-img src="DUMANARGE.jpg"></v-img>
-
-      <v-list-item class="px-2">
-        <v-list-item-avatar>
-          <v-img v-model="kullanici_img"></v-img>
-        </v-list-item-avatar>
-
-        <v-list-item-title v-text="kullanici"></v-list-item-title>
-
-        <v-btn
-            icon
-            @click="pushAdmin"
+      <v-list>
+        <v-list-item
+            v-for="item in kullaniciBilgileri"
+            :key="item.title"
         >
-          <v-icon>mdi-chess-rook</v-icon>
-        </v-btn>
-      </v-list-item>
+          <v-list-item-content>
+            <v-list-item-title v-text="item.title"></v-list-item-title>
+          </v-list-item-content>
+
+          <v-list-item-avatar>
+            <v-img :src="item.avatar"></v-img>
+          </v-list-item-avatar>
+        </v-list-item>
+      </v-list>
 
       <v-divider></v-divider>
       <v-divider></v-divider>
@@ -70,8 +69,8 @@
 
       <v-app-bar-title>360 Müşteri Performans Yönetim Platformu</v-app-bar-title>
       <v-spacer></v-spacer>
-      <v-card-title>{{ kullanici }}</v-card-title>
-      <v-btn @click="logout">
+
+      <v-btn @click="cikisYap">
         <v-icon> mdi-logout</v-icon>
         Çıkış Yap
       </v-btn>
@@ -82,10 +81,6 @@
       <router-view></router-view>
     </v-main>
   </v-app>
-
-  <v-container v-else>
-    <Login></Login>
-  </v-container>
 </template>
 
 <script>
@@ -98,62 +93,57 @@ export default {
   components: {Login, MsgComponent},
   data: () => (
       {
-        kullanici: localStorage.getItem('user') || null,
-        kullanici_img: localStorage.getItem('userimg') || null,
-
-        drawer: null,
+        drawer: false,
+        logged_state: false,
 
         items: [
           {title: 'Ana Sayfa', icon: 'mdi-home', to: '/'},
           {title: 'Cari Hesap', icon: 'mdi-account-cash', to: '/checkaccount'},
           {title: 'Risk Analiz', icon: 'mdi-database-edit', to: '/riskanalysis'},
+
         ],
+
+        kullaniciBilgileri : [
+          {title: null, avatar: 'https://cdn.vuetifyjs.com/images/lists/2.jpg' },
+        ]
       }),
 
   methods: {
-
-    pushAdmin() {
-      this.$router.push('/admin')
+    setKullaniciBilgileri(title, avatar) {
+      this.kullaniciBilgileri = [{title: title, avatar: avatar}]
     },
 
-    setAvatar() {
-      if (this.kullanici !== null) {
-        axios.defaults.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('token');
+    clearCredential() {
+      this.setKullaniciBilgileri(null, null)
+    },
 
-        const AVATAR_API = "http://127.0.0.1:8000/appconfig/getavatar/" + this.kullanici
-        console.log(AVATAR_API)
-        const response = axios.get(AVATAR_API)
-        console.log("avatar response : " + response)
-        if (response.status === 200) {
-          console.log("avatar response : " + response.data)
-          this.kullanici_img = response.data
-        }
+    setTestCredential() {
+      this.setKullaniciBilgileri("Test Kullanıcısı", "https://cdn.vuetifyjs.com/images/lists/2.jpg")
+    },
+
+    getCredentialUserInfo() {
+      this.logged_state = this.$store.state.logged;
+      if (this.logged_state !== "true") {
+        this.$router.push({path: '/'})
       }
+
+      const user = this.$store.state.user;
+      console.log("get logged user : " + user)
+      this.setKullaniciBilgileri(user, '')
     },
 
-    logout() {
-      this.$store.commit("logout");
-      this.kullanici = null;
-      this.kullanici_img = null
-    },
+    cikisYap() {
+      this.$store.commit("logout")
+      this.clearCredential();
+      this.logged_state = "false"
 
-    getCredential() {
-      const user = this.$store.commit("getCredentialstate")
-
-      console.log("app page user : " + user)
-      // console.log("local storage user : " + localStorage.getItem("user"))
-      // console.log("app kullanici : " + this.kullanici)
-      this.kullanici = user;
+      this.$router.push({path: '/login'})
     }
   },
 
-
   mounted() {
-    console.log("guard in app : " + this.$store.state.user)
-
-    this.getCredential();
-    this.setAvatar();
-    console.log("App mounted !")
+    this.getCredentialUserInfo();
+    this.setTestCredential();
   },
 
 }

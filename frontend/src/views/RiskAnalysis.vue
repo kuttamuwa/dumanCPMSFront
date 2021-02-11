@@ -72,6 +72,7 @@
                   :items="riskdatasetValues"
                   :items-per-page="10"
                   class="elevation-1"
+                  @click:row="getDetailAccount"
               >
                 <template v-slot:item.actions="{ item }">
                   <v-icon
@@ -174,6 +175,11 @@ export default {
     clear() {
       this.excelFile = null
       this.$refs.observer.reset()
+    },
+
+    getDetailAccount(value) {
+      console.log("item no : " + this.editedIndex)
+      console.log("value : " + JSON.stringify(value))
     },
 
     async analyzeItem(item) {

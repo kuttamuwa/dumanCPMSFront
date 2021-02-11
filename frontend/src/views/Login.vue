@@ -41,11 +41,23 @@ export default {
 
       const user = await this.$store.dispatch("login", {username: this.username, password: this.password});
       console.log("logged user : " + user)
+
+      await this.$router.push({path: '/'})
     },
+
+    checkLoggedState() {
+      let logstate = this.$store.state.logged
+      console.log("log state : " + logstate)
+
+      if (logstate === "true") {
+        this.$store.commit('showmsg', {text: 'Zaten giriş yapmış durumdasınız', show: true})
+        this.$router.push({path: '/'})
+      }
+    }
   },
 
   mounted() {
-    console.log("Login page ")
+    this.checkLoggedState()
 
   }
 }

@@ -101,6 +101,7 @@ export default {
           {title: 'Ana Sayfa', icon: 'mdi-home', to: '/'},
           {title: 'Cari Hesap', icon: 'mdi-account-cash', to: '/checkaccount'},
           {title: 'Risk Analiz', icon: 'mdi-database-edit', to: '/riskanalysis'},
+          {title: 'Dashboard', icon: 'mdi-chart-pie', to: '/dashboard'},
 
         ],
 

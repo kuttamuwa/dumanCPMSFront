@@ -110,9 +110,8 @@
                 required
             ></v-text-field>
           </v-col>
-          <!--        İletişim bilgileri-->
-          <v-col
-          >
+
+          <v-col>
             <v-card-text> Ek Dosyalar </v-card-text>
             <v-file-input
                 accept="image/*"
@@ -135,7 +134,6 @@
                 v-model="imzaDoc"
             ></v-file-input>
 
-<!--            <v-container id="attachmentsPartnership">-->
               <v-file-input
                   accept="image/*"
                   label="Ortaklık yapısı ve kimlik kopyaları"
@@ -156,7 +154,6 @@
                   id="managementDoc"
                   v-model="managementDoc"
               ></v-file-input>
-<!--            </v-container>-->
           </v-col>
 
         </v-row>
@@ -266,6 +263,15 @@ export default {
   }),
 
   methods: {
+    async getCities() {
+      const response = await axios.get(CITY_API)
+      let data = response.data;
+      this.sehirler = data.map(function (item) {
+        return item.name
+      })
+      console.log("Sehirler yuklendi");
+    },
+
     async getDistrict() {
       let cityName = this.city
       const DISTRICT_API = "http://127.0.0.1:8000/checkaccount/api/district/?city=" + cityName;
@@ -274,6 +280,15 @@ export default {
         return item.name
       });
       console.log(cityName + "için ilçeler çekildi")
+    },
+
+    async getSysPersonnels() {
+      const PERSONNEL_API = "http://127.0.0.1:8000/checkaccount/api/syspersonnels/?format=json"
+      const response = await axios.get(PERSONNEL_API);
+      this.syspersonnels = response.data.map(function (item) {
+        return item.username
+      })
+      console.log("Personel listesi yüklendi");
     },
 
     closeDialog() {
@@ -285,6 +300,64 @@ export default {
       })
     },
 
+    async postData() {
+      let formData = new FormData();
+      formData.append("partnership_structure_identity_copies", this.partnershipDoc);
+      formData.append("activity_certificate_pdf", this.faaliyetDoc);
+      formData.append("tax_return_pdf", this.vergiDoc);
+
+      formData.append("authorized_signatures_list_pdf", this.imzaDoc);
+      formData.append("board_management", this.managementDoc);
+      formData.append("identity_copies", this.identityDoc);
+
+      formData.append('firm_full_name', this.firm_full_name)
+      formData.append('firm_type', this.firm_type)
+      formData.append('taxpayer_number', this.taxpayer_number)
+      formData.append('birthplace', this.birthplace)
+      formData.append('tax_department', this.tax_department)
+      formData.append('firm_address', this.firm_address)
+      formData.append('firm_key_contact_personnel', this.firm_key_contact_personnel)
+      formData.append('sector', this.sector)
+      formData.append('city', this.city)
+      formData.append('district', this.district)
+      formData.append('phone_number', this.phone_number)
+      formData.append('fax', this.fax)
+      formData.append('web_url', this.web_url)
+      formData.append('email_addr', this.email_addr)
+
+      const response = await axios.post(ACCOUNT_API, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(
+          (response => {
+            if (response.status !== 201) {
+              lstore.commit('showmsg', {text: "Cari hesap oluşturulamadı", show: true})
+              console.log(response)
+            } else {
+              console.log("Hesap oluşturuldu !");
+              lstore.commit('showmsg', {
+                text: "Cari Hesap oluşturuldu: " + response.data.firm_full_name
+                , show: true
+              });
+            }
+          })
+      )
+    },
+
+    async getAccounts() {
+      const response = await axios.get(ACCOUNT_API)
+      this.accountValues = response.data
+    },
+
+    async getDataFromApi() {
+      await this.$store.commit('checkPermission');
+      await this.getAccounts();
+      await this.getCities();
+      await this.getSysPersonnels();
+
+    },
+
     async submitData() {
       console.log(this.editedItem);
       await this.save();
@@ -292,6 +365,12 @@ export default {
       await this.getAccounts();
       this.accountValues.push(this.editedItem);
     },
+  },
+
+  mounted() {
+    axios.defaults.headers.common['Authorization'] = 'JWT ' + localStorage.getItem('token');
+
+    this.getDataFromApi();
   }
 }
 </script>

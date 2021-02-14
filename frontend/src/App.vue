@@ -135,8 +135,12 @@ export default {
       }
 
       let user = this.$store.state.user;
+      let avatar = this.$store.state.userimg;
+
       console.log("get logged user : " + user)
-      this.setKullaniciBilgileri(user, '')
+      console.log("avatar : " + avatar)
+
+      this.setKullaniciBilgileri(user, avatar)
     },
 
     cikisYap() {
@@ -144,12 +148,13 @@ export default {
       this.clearCredential();
 
       this.$router.push({path: '/login'})
-    }
+    },
   },
+
 
   mounted() {
     this.getCredentialUserInfo();
-    this.setTestCredential();
+    // this.setTestCredential();
   },
 
 }

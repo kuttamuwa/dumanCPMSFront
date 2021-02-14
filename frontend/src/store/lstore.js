@@ -39,6 +39,20 @@ export default new Vuex.Store({
             }
         },
 
+        setAvatar(state, username) {
+            const AVATAR_API = "http://127.0.0.1:8000/appconfig/getavatar/" + username
+            console.log("avatar api : " + AVATAR_API)
+
+            try {
+                const response = axios.get(AVATAR_API)
+                if (response.status === 200) {
+                    let avatar = response.data;
+                    console.log("Avatar : " + avatar)
+                }
+            } catch (e) {
+
+            }
+        },
 
         setCredential(state, token) {
             // set token
@@ -49,6 +63,9 @@ export default new Vuex.Store({
             let user = jwt.decode(token, process.env.VUE_APP_DJ_SECRET_KEY)
             localStorage.setItem("user", user.username)
             this.state.user = user.username
+
+            // set avatar
+            // this.setAvatar(user)
 
             // set expired date
             localStorage.setItem("expired", user.exp)

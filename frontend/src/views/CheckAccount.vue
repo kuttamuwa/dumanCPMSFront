@@ -17,7 +17,8 @@
 
         <v-dialog
             v-model="createCardDialog"
-            max-width="500px">
+
+            >
 
           <template v-slot:activator="{on, attrs}">
             <v-btn
@@ -237,7 +238,7 @@ export default {
       this.createCardDialog = false
     },
 
-    closeEdit(val) {
+    closeEdit() {
       this.editCardDialog = false
     },
 

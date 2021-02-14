@@ -47,7 +47,7 @@
 
                 <v-btn
                     class="mr-4"
-                    @click="save"
+                    @click="excelDehle"
                 >
                   Gönder
                 </v-btn>
@@ -85,7 +85,7 @@
                 </template>
 
                 <template v-slot:no-data>
-                  <v-card-text> Hiç veri bulunamamıştır </v-card-text>
+                  <v-card-text> Hiç veri bulunamamıştır</v-card-text>
                 </template>
 
               </v-data-table>
@@ -164,13 +164,17 @@ export default {
       return perm
     },
 
-    async getDataFromApi() {
-      await this.getRiskDataset();
+    getDataFromApi() {
+      this.getRiskDataset();
     },
 
     async getRiskDataset() {
       const response = await axios.get(RISKDATASET_API);
-      console.log("get risk dataset : " + JSON.stringify(response))
+      if (response.statusText === 'OK') {
+        this.$store.commit('showmsg', {text: 'Veriler yüklendi', show: true})
+      } else {
+        this.$store.commit('showmsg', {text: 'Verileriniz yüklenemedi !', show: true})
+      }
       this.riskdatasetValues = response.data;
       console.log(this.riskdatasetValues);
     },
@@ -197,7 +201,8 @@ export default {
       this.riskdatasetValues[index].general_point = point
     },
 
-    async save() {
+    async excelDehle() {
+      console.log("excel dehleniyor..")
       let formData = new FormData();
       formData.append("excel", this.excelFile);
 
@@ -211,7 +216,6 @@ export default {
             if (response.status !== 200) {
               this.$store.commit('showmsg', {text: 'Yükleme başarısız !', show: true})
             } else {
-              console.log("YÜKLEME BAŞARILI")
               console.log("fetched data : " + response.data)
               this.$store.commit('showmsg', {text: "Verileriniz yüklendi", show: true})
             }

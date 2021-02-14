@@ -24,6 +24,22 @@ export default new Vuex.Store({
     },
 
     mutations: {
+        checkPermission (state) {
+            const ACCOUNT_API = "http://127.0.0.1:8000/checkaccount/api/accounts/?format=json";
+
+            try {
+                axios.get(ACCOUNT_API)
+
+            } catch (e) {
+                let statuscode = e.response.status
+                if (statuscode === 401) {
+                    this.$store.commit("showmsg", {text: "Uzun zamandır işlem yapmadınız, lütfen tekrar giriş yapınız", show: true})
+                    this.$store.commit('logout');
+                }
+            }
+        },
+
+
         setCredential(state, token) {
             // set token
             localStorage.setItem("token", token);
@@ -49,12 +65,24 @@ export default new Vuex.Store({
             console.log("after set :" + this.state.user)
         },
 
-        logout(state) {
-            state.logged = "false"
-            state.token = null
-            state.user = null
-            state.userimg = null
-            state.expired = null
+        removeCredential(state) {
+            // set token
+            localStorage.removeItem("token");
+            this.state.token = null
+
+            // set user
+            localStorage.removeItem("user")
+            this.state.user = null
+
+            // set expired date
+            localStorage.removeItem("expired")
+            this.state.expired = null
+
+            // log state
+            localStorage.setItem("logged", "false");
+            this.state.logged = "false";
+
+            console.log("after set :" + this.state.user)
         },
 
         showmsg(state, payload) {
@@ -81,12 +109,22 @@ export default new Vuex.Store({
                 // console.log("user2 : " + JSON.stringify(user2))
 
                 commit('showmsg', {text: 'Giriş yapıldı !', show: true})
+
                 return user
 
             } catch (e) {
                 commit('showmsg', {text: 'Giriş yapılamadı !' + e, show: true})
             }
 
+        },
+
+        async logout({commit}) {
+            try {
+                commit('removeCredential')
+
+            } catch (e) {
+                commit('showmsg', {text: "Çıkış yapılamadı !" + e, show: true})
+            }
         },
 
         async logoutserv({commit}) {

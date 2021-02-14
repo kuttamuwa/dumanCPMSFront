@@ -1,119 +1,15 @@
 <template>
-  <template v-slot:top>
     <v-dialog
         v-model="dialog"
         max-width="500px"
+        fullscreen
+
     >
       <v-card>
-        <v-card-title>
-          <span class="headline">Cari Hesap</span>
-        </v-card-title>
 
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-text-field
-                  v-model="editedItem.firm_type"
-                  label="Firma Tipi"
-              ></v-text-field>
-              <v-text-field
-                  v-model="editedItem.firm_full_name"
-                  label="Firma Adı"
-              ></v-text-field>
-              <v-text-field
-                  v-model="editedItem.taxpayer_number"
-                  label="Kimlik No"
-              ></v-text-field>
-              <v-text-field
-                  v-model="editedItem.birthplace"
-                  label="Doğum Yeri"
-              ></v-text-field>
-              <v-text-field
-                  v-model="editedItem.tax_department"
-                  label="Vergi Departmanı"
-              ></v-text-field>
-              <v-text-field
-                  v-model="editedItem.firm_address"
-                  label="Firma Adresi"
-              ></v-text-field>
-              <v-text-field
-                  v-model="editedItem.firm_key_contact_personnel"
-                  label="Firma Contact"
-              ></v-text-field>
-              <v-text-field
-                  v-model="editedItem.sector"
-                  label="Sektör"
-              ></v-text-field>
-              <v-text-field
-                  v-model="editedItem.city"
-                  label="Şehir"
-              ></v-text-field>
-              <v-text-field
-                  v-model="editedItem.district"
-                  label="İlçe"
-              ></v-text-field>
-              <v-text-field
-                  v-model="editedItem.phone_number"
-                  label="Tel No"
-              ></v-text-field>
-              <v-text-field
-                  v-model="editedItem.fax"
-                  label="Fax"
-              ></v-text-field>
-              <v-text-field
-                  v-model="editedItem.web_url"
-                  label="Vergi Departmanı"
-              ></v-text-field>
-              <v-text-field
-                  v-model="editedItem.email_addr"
-                  label="Email"
-              ></v-text-field>
-            </v-row>
-          </v-container>
-        </v-card-text>
-
-        <v-card-actions>
-          <v-spacer></v-spacer>
-          <v-btn
-              color="blue darken-1"
-              text
-              @click="close"
-          >
-            İptal
-          </v-btn>
-          <v-btn
-              color="blue darken-1"
-              text
-              @click="save"
-          >
-            Kaydet
-          </v-btn>
-        </v-card-actions>
       </v-card>
-
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn
-            color="blue darken-1"
-            text
-            @click="close"
-        >
-          İptal
-        </v-btn>
-        <v-btn
-            color="blue darken-1"
-            text
-            @click="save"
-        >
-          Kaydet
-        </v-btn>
-      </v-card-actions>
     </v-dialog>
-  </template>
 
-  <template v-slot:no-data>
-    <v-card-text> Hiç veri bulunamamıştır</v-card-text>
-  </template>
 </template>
 
 <script>
@@ -121,6 +17,25 @@ export default {
   name: "AccountCard",
   data: () => ({
     dialog: true,
+
+    accountColumns: [
+      {text: 'Firma Adı', align: 'start', value: 'firm_full_name'},
+      {text: 'Firma Tipi', value: 'firm_type'},
+      {text: 'Kimlik No', value: 'taxpayer_number'},
+      {text: 'Doğum Yeri', value: 'birthplace'},
+      {text: 'Vergi Departmanı', value: 'tax_department'},
+      {text: 'Firma Adresi', value: 'firm_address'},
+      {text: 'Firma İletişim', value: 'firm_key_contact_personnel'},
+      {text: 'Sektör', value: 'sector'},
+      {text: 'Şehir', value: 'city'},
+      {text: 'İlçe', value: 'district'},
+      {text: 'Tel', value: 'phone_number'},
+      {text: 'Fax', value: 'fax'},
+      {text: 'Web', value: 'web_url'},
+      {text: 'Email', value: 'email_addr'},
+      {text: 'Aksiyonlar', value: 'actions', sortable: false},
+    ],
+
     editedItem: {
       firm_full_name: '',
       firm_type: '',
@@ -137,6 +52,7 @@ export default {
       web_url: '',
       email_addr: '',
     },
+
 
     methods: {
       async save() {

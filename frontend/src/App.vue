@@ -88,6 +88,7 @@ import MsgComponent from "@/components/msgComponent";
 import axios from "axios";
 
 import Login from "@/views/Login";
+const ACCOUNT_API = "http://127.0.0.1:8000/checkaccount/api/accounts/?format=json";
 
 export default {
   components: {Login, MsgComponent},
@@ -109,12 +110,18 @@ export default {
       }),
 
   methods: {
+
     setKullaniciBilgileri(title, avatar) {
       this.kullaniciBilgileri = [{title: title, avatar: avatar}]
     },
 
+    getLoggedState() {
+      this.logged_state = this.$store.state.logged
+    },
+
     clearCredential() {
       this.setKullaniciBilgileri(null, null)
+      this.getLoggedState()
     },
 
     setTestCredential() {
@@ -122,20 +129,19 @@ export default {
     },
 
     getCredentialUserInfo() {
-      this.logged_state = this.$store.state.logged;
+      this.getLoggedState()
       if (this.logged_state !== "true") {
         this.$router.push({path: '/'})
       }
 
-      const user = this.$store.state.user;
+      let user = this.$store.state.user;
       console.log("get logged user : " + user)
       this.setKullaniciBilgileri(user, '')
     },
 
     cikisYap() {
-      this.$store.commit("logout")
+      this.$store.dispatch("logout")
       this.clearCredential();
-      this.logged_state = "false"
 
       this.$router.push({path: '/login'})
     }

@@ -24,6 +24,7 @@
 </template>
 
 <script>
+
 export default {
   name: "Login",
 
@@ -41,13 +42,13 @@ export default {
 
       const user = await this.$store.dispatch("login", {username: this.username, password: this.password});
       console.log("logged user : " + user)
-
-      await this.$router.push({path: '/'})
+      window.location.reload()
     },
 
     checkLoggedState() {
       let logstate = this.$store.state.logged
       console.log("log state : " + logstate)
+      console.log("reload : " + this.reload)
 
       if (logstate === "true") {
         this.$store.commit('showmsg', {text: 'Zaten giriş yapmış durumdasınız', show: true})

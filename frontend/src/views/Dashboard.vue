@@ -348,8 +348,9 @@ export default {
     },
 
     async getvadeasanlar() {
-      var url = DASHBOARD_URL + "/?dtype=v"
-      const response = await axios.get(url);
+      const VADE_URL = DASHBOARD_URL + "?dtype=v"
+      console.log("vade asanlar : " + VADE_URL)
+      const response = await axios.get(VADE_URL);
       console.log("vade aşanlar response : " + response);
       this.vadeasanlar = response.data;
     },
@@ -357,33 +358,40 @@ export default {
     async getdevirhizikotuolanlar() {
       // 'dh1': devir_hizi_self_artmis,
       // 'dh2': devir_hizi_baskalariyla_artmis,
-      const url = DASHBOARD_URL + "/?dtype=" + this.dhtype;
-      const response = await axios.get(url);
+      const DEVIR_URL = DASHBOARD_URL + "?dtype=" + this.dhtype;
+      console.log("devir hızı kötü olanlar : " + DEVIR_URL)
+      const response = await axios.get(DEVIR_URL);
       console.log("devir hizi kötü olanlar response : " + response);
       this.devirhizikotuolanlar = response.data;
     },
 
     async getvergiborcuolanlar() {
-      const url = DASHBOARD_URL + "/?dtype=v"
-      const response = await axios.get(url);
+      const VERGI_URL = DASHBOARD_URL + "?dtype=v"
+      console.log("vergi borcu kötü olanlar : " + VERGI_URL)
+      const response = await axios.get(VERGI_URL);
       console.log("vergi borcu olanlar response : " + response);
       this.vergiborcuolanlar = response.data;
     },
 
     async getsgkborcuolanlar() {
-      const url = DASHBOARD_URL + "/?dtype=s"
-      const response = await axios.get(url);
+      const SGK_URL = DASHBOARD_URL + "?dtype=s"
+      console.log("SGK Borcu olanlar : " + SGK_URL)
+      const response = await axios.get(SGK_URL);
       console.log("SGK borcu olanlar response : " + response);
       this.sgkborcuolanlar = response.data;
     },
 
     async getsektorkaraliste() {
-      const url = DASHBOARD_URL + "/?dtype=skl"
-      const response = await axios.get(url);
+      const SEKTOR_URL = DASHBOARD_URL + "?dtype=skl"
+      console.log("Sektör URL : " + SEKTOR_URL)
+      const response = await axios.get(SEKTOR_URL);
       console.log("limiti aşanlar response : " + response);
       this.sektorkaraliste = response.data;
-    }
+    },
 
+    testfn() {
+      console.log("basildi !")
+    }
   }
 }
 </script>

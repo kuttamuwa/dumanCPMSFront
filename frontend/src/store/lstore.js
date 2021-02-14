@@ -20,7 +20,9 @@ export default new Vuex.Store({
             text: ''
         },
         permissions: [],
-        avmodules: null
+        avmodules: null,
+
+        ca_create_dialog: false
     },
 
     mutations: {
@@ -37,6 +39,14 @@ export default new Vuex.Store({
                     this.$store.commit('logout');
                 }
             }
+        },
+
+        ca_create_dialog_true(state) {
+            this.state.ca_create_dialog = true;
+        },
+
+        ca_create_dialog_false(state) {
+            this.state.ca_create_dialog = false
         },
 
         setAvatar(state, username) {

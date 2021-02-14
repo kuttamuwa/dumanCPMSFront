@@ -184,6 +184,7 @@ import lstore from "@/store/lstore";
 
 const ACCOUNT_API = "http://127.0.0.1:8000/checkaccount/api/accounts/?format=json";
 const CITY_API = "http://127.0.0.1:8000/checkaccount/api/cities/?format=json";
+import CheckAccount from "@/views/CheckAccount";
 
 const axios = require('axios').default;
 
@@ -358,9 +359,15 @@ export default {
 
     },
 
+    closeDataDialog() {
+      this.createCardDialog = false;
+      this.$store.commit('ca_create_dialog_false')
+    },
+
     async submitData() {
       console.log(this.editedItem);
-      await this.save();
+      await this.postData();
+      this.closeDataDialog();
 
       await this.getAccounts();
       this.accountValues.push(this.editedItem);

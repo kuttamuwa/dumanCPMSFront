@@ -159,7 +159,9 @@ export default {
   methods: {
     async getPerms() {
       const response = await axios.get(RISKDATASET_API)
-      return response.status !== 401
+      const perm = response.status !== 401
+      console.log("permission on risk analysis : " + perm)
+      return perm
     },
 
     async getDataFromApi() {
@@ -168,6 +170,7 @@ export default {
 
     async getRiskDataset() {
       const response = await axios.get(RISKDATASET_API);
+      console.log("get risk dataset : " + JSON.stringify(response))
       this.riskdatasetValues = response.data;
       console.log(this.riskdatasetValues);
     },
@@ -206,9 +209,7 @@ export default {
           }).then(
           (response => {
             if (response.status !== 200) {
-              console.log("YÜKLEME BAŞARISIZ :/")
-              this.alert_type = "alert";
-              this.alert_text = response.data
+              this.$store.commit('showmsg', {text: 'Yükleme başarısız !', show: true})
             } else {
               console.log("YÜKLEME BAŞARILI")
               console.log("fetched data : " + response.data)

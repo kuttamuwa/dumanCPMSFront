@@ -343,7 +343,7 @@ export default {
 
     async submitData() {
       console.log(this.editedItem);
-      await this.save();
+      await this.kaydet();
 
       await this.getAccounts();
       this.accountValues.push(this.editedItem);

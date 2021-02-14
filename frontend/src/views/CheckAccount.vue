@@ -211,6 +211,7 @@ export default {
     },
 
     createItem() {
+      this.$store.commit('ca_create_dialog_true')
       this.createCardDialog = true
     },
 
@@ -235,6 +236,7 @@ export default {
     },
 
     closeCreate() {
+      this.$store.commit('ca_create_dialog_false')
       this.createCardDialog = false
     },
 
@@ -253,7 +255,7 @@ export default {
 
     async submitData() {
       console.log(this.editedItem);
-      await this.save();
+      await this.kaydet();
 
       await this.getAccounts();
       this.accountValues.push(this.editedItem);
@@ -361,6 +363,7 @@ export default {
 
 
   },
+
 }
 </script>
 
